@@ -97,6 +97,58 @@ A feature or system component is considered "enterprise-grade" when **all** of t
 - [ ] Data processing agreement (DPA) ready
 - [ ] Webhook payload logging excludes sensitive customer data
 
+## Code Quality and Standards
+
+- [ ] Pre-commit hooks enforce linting, formatting, and type checking
+- [ ] ESLint configured with project-specific rules
+- [ ] Prettier configured for consistent code formatting
+- [ ] TypeScript strict mode enabled
+- [ ] Conventional Commits enforced via commitlint
+- [ ] Secret scanning in pre-commit hooks (gitleaks or similar)
+- [ ] Code review required for all changes
+- [ ] No console.log statements in production code
+- [ ] Dead code elimination verified
+- [ ] Import statements organized and unused imports removed
+
+## CI/CD and Deployment
+
+- [ ] Comprehensive CI pipeline in GitHub Actions
+- [ ] All tests (unit, integration, e2e) run in CI
+- [ ] Code coverage ≥80% enforced in CI
+- [ ] SAST scanning integrated (CodeQL, Semgrep, or Snyk)
+- [ ] Dependency vulnerability scanning automated
+- [ ] Build artifacts signed via GitHub Attestation API
+- [ ] Deployment to staging automated on main branch merge
+- [ ] Production deployment requires manual approval
+- [ ] Zero-downtime deployment strategy
+- [ ] Rollback procedures documented and tested
+- [ ] Environment-specific configurations managed securely
+
+## Supply Chain Security
+
+- [ ] All production artifacts signed with GitHub Attestations
+- [ ] Attestations include build provenance (commit SHA, workflow, timestamp)
+- [ ] Deployment pipeline verifies attestations before deployment
+- [ ] Dependency pinning with lock files committed
+- [ ] Dependabot configured for automated dependency updates
+- [ ] SBOM (Software Bill of Materials) generated for releases
+- [ ] Container images scanned for vulnerabilities
+- [ ] Base images from trusted sources only
+
+## Accessibility
+
+- [ ] WCAG 2.1 AA compliance mandatory for all UI components
+- [ ] eslint-plugin-jsx-a11y configured and enforced
+- [ ] axe-core integrated into component tests
+- [ ] pa11y integrated into E2E test suite
+- [ ] All interactive elements have proper ARIA labels and roles
+- [ ] All form inputs have associated labels
+- [ ] Color contrast meets WCAG AA standards (4.5:1 for normal text)
+- [ ] Keyboard navigation fully functional (no mouse-only interactions)
+- [ ] Screen reader testing performed on critical flows
+- [ ] Focus indicators visible and clear
+- [ ] No accessibility violations in pre-commit or CI
+
 ---
 
 ## Performance and Scalability Targets
@@ -117,6 +169,12 @@ A feature or system component is considered "enterprise-grade" when **all** of t
 | Security | Authentication | OAuth 2.0 with Shopify |
 | Security | Authorization | RBAC (admin/editor/viewer) |
 | Security | Encryption | TLS in transit, at rest for sensitive fields |
-| Maintainability | Code quality | Linting, type checking, code review |
+| Maintainability | Code quality | Pre-commit hooks, ESLint, Prettier, TypeScript strict |
 | Maintainability | Test coverage | ≥80% business logic |
 | Maintainability | Deployment | Zero-downtime with rollback |
+| Accessibility | WCAG compliance | WCAG 2.1 AA for all UI components |
+| Accessibility | Automated testing | eslint-plugin-jsx-a11y, axe-core, pa11y |
+| Accessibility | Keyboard navigation | All interactions accessible without mouse |
+| Supply Chain | Artifact signing | GitHub Attestation API for all builds |
+| Supply Chain | Dependency scanning | Automated vulnerability scanning in CI |
+| Supply Chain | SBOM | Software Bill of Materials for releases |

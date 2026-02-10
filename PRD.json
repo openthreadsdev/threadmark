@@ -2,7 +2,7 @@
   "projectMetadata": {
     "projectName": "Compliance-Ready Product Records Platform",
     "version": "2.0.0-agent-optimized",
-    "lastUpdated": "2026-02-06",
+    "lastUpdated": "2026-02-10",
     "projectLead": "OpenThreads.dev",
     "distributionWedge": "Shopify",
     "restructuredFor": "Long-running agent workflows per Anthropic recommendations"
@@ -454,6 +454,66 @@
             "Data processing agreement (DPA) ready",
             "Webhook payload logging excludes sensitive customer data"
           ]
+        },
+        {
+          "category": "Code Quality and Standards",
+          "requirements": [
+            "Pre-commit hooks enforce linting, formatting, and type checking",
+            "ESLint configured with project-specific rules",
+            "Prettier configured for consistent code formatting",
+            "TypeScript strict mode enabled",
+            "Conventional Commits enforced via commitlint",
+            "Secret scanning in pre-commit hooks (gitleaks or similar)",
+            "Code review required for all changes",
+            "No console.log statements in production code",
+            "Dead code elimination verified",
+            "Import statements organized and unused imports removed"
+          ]
+        },
+        {
+          "category": "CI/CD and Deployment",
+          "requirements": [
+            "Comprehensive CI pipeline in GitHub Actions",
+            "All tests (unit, integration, e2e) run in CI",
+            "Code coverage ≥80% enforced in CI",
+            "SAST scanning integrated (CodeQL, Semgrep, or Snyk)",
+            "Dependency vulnerability scanning automated",
+            "Build artifacts signed via GitHub Attestation API",
+            "Deployment to staging automated on main branch merge",
+            "Production deployment requires manual approval",
+            "Zero-downtime deployment strategy",
+            "Rollback procedures documented and tested",
+            "Environment-specific configurations managed securely"
+          ]
+        },
+        {
+          "category": "Supply Chain Security",
+          "requirements": [
+            "All production artifacts signed with GitHub Attestations",
+            "Attestations include build provenance (commit SHA, workflow, timestamp)",
+            "Deployment pipeline verifies attestations before deployment",
+            "Dependency pinning with lock files committed",
+            "Dependabot configured for automated dependency updates",
+            "SBOM (Software Bill of Materials) generated for releases",
+            "Container images scanned for vulnerabilities",
+            "Base images from trusted sources only"
+          ]
+        },
+        {
+          "category": "Accessibility",
+          "requirements": [
+            "WCAG 2.1 AA compliance mandatory for all UI components",
+            "eslint-plugin-jsx-a11y configured and enforced",
+            "axe-core integrated into component tests",
+            "pa11y integrated into E2E test suite",
+            "All interactive elements have proper ARIA labels and roles",
+            "All form inputs have associated labels",
+            "Color contrast meets WCAG AA standards (4.5:1 for normal text)",
+            "Keyboard navigation fully functional (no mouse-only interactions)",
+            "Screen reader testing performed on critical flows",
+            "Focus indicators visible and clear",
+            "No accessibility violations in pre-commit or CI"
+          ]
         }
       ]
     },
@@ -478,13 +538,15 @@
         "authentication": "OAuth 2.0 with Shopify",
         "authorization": "Role-based access control (admin/editor/viewer)",
         "dataEncryption": "TLS in transit, encryption at rest for sensitive fields",
-        "auditability": "Complete audit trail for all data changes"
+        "auditability": "Complete audit trail for all data changes",
+        "supplyChain": "GitHub Attestation API for artifact signing, SBOM generation, dependency scanning, container scanning"
       },
       "maintainability": {
-        "codeQuality": "Linting, type checking, code review required",
+        "codeQuality": "Pre-commit hooks (Husky, lint-staged), ESLint, Prettier, TypeScript strict mode, commitlint for Conventional Commits, code review required",
         "testCoverage": "≥80% for business logic",
         "documentation": "All public APIs and architectural decisions documented",
-        "deployment": "Zero-downtime deployments with rollback capability"
+        "deployment": "Zero-downtime deployments with rollback capability",
+        "accessibility": "WCAG 2.1 AA compliance, eslint-plugin-jsx-a11y, axe-core, pa11y"
       }
     }
   },
@@ -3690,6 +3752,179 @@
       ],
       "blockers": [],
       "notes": ""
+    },
+    {
+      "id": "F100",
+      "phase": 1,
+      "name": "Pre-commit Hook Configuration",
+      "description": "Set up Husky and lint-staged for automated pre-commit quality checks (linting, formatting, type checking, commit message validation)",
+      "status": "pending",
+      "dependencies": [
+        "F008",
+        "F018"
+      ],
+      "verificationSteps": [
+        "1. Install and configure Husky",
+        "2. Configure lint-staged for ESLint, Prettier, TypeScript",
+        "3. Add commitlint for Conventional Commits",
+        "4. Add pre-commit secret scanning (gitleaks or similar)",
+        "5. Test hooks with intentional violations",
+        "6. Document hook bypass procedures for emergencies"
+      ],
+      "acceptanceCriteria": [
+        "Pre-commit hooks prevent commits with linting errors",
+        "Pre-commit hooks prevent commits with formatting issues",
+        "Pre-commit hooks prevent commits with type errors",
+        "Commit messages must follow Conventional Commits format",
+        "Secret scanning blocks commits containing potential secrets",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Test hook configuration files are valid",
+        "integration": "Test hooks fire on git commit and block bad commits",
+        "e2e": "Test full developer workflow with hooks enabled"
+      },
+      "filesAffected": [
+        ".husky/pre-commit",
+        ".husky/commit-msg",
+        ".lintstagedrc.json",
+        ".commitlintrc.json",
+        "package.json"
+      ],
+      "blockers": [],
+      "notes": "Hooks enforce quality locally but CI/CD is authoritative. Developers can bypass with --no-verify in emergencies."
+    },
+    {
+      "id": "F101",
+      "phase": 1,
+      "name": "Comprehensive CI/CD Pipeline",
+      "description": "Enhanced GitHub Actions pipeline with full test suite, coverage reporting, SAST, dependency scanning, build verification, and deployment automation",
+      "status": "pending",
+      "dependencies": [
+        "F017",
+        "F100"
+      ],
+      "verificationSteps": [
+        "1. Enhance existing CI workflow with comprehensive test jobs",
+        "2. Add test coverage reporting (Codecov or Coveralls)",
+        "3. Add SAST scanning (CodeQL, Semgrep, or Snyk)",
+        "4. Add dependency vulnerability scanning",
+        "5. Add build artifact generation and validation",
+        "6. Configure deployment jobs (staging, production)",
+        "7. Add performance benchmarking job",
+        "8. Configure required status checks for PRs",
+        "9. Test full pipeline with PR"
+      ],
+      "acceptanceCriteria": [
+        "All tests run in CI (unit, integration, e2e)",
+        "Code coverage ≥80% enforced in CI",
+        "SAST findings reviewed and addressed",
+        "No high/critical dependency vulnerabilities",
+        "Build artifacts generated and verified",
+        "Deployment to staging automated on main branch",
+        "Production deployment requires manual approval",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Test workflow YAML validity",
+        "integration": "Test full CI pipeline on PR",
+        "e2e": "Test deployment workflow to staging environment"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy.yml",
+        ".github/dependabot.yml"
+      ],
+      "blockers": [],
+      "notes": "Builds on F017 (CI Pipeline Skeleton). This expands it to production-grade with comprehensive checks and deployment automation."
+    },
+    {
+      "id": "F102",
+      "phase": 1,
+      "name": "GitHub Attestation API Integration",
+      "description": "Implement artifact signing using GitHub Attestation API for build provenance and supply chain security",
+      "status": "pending",
+      "dependencies": [
+        "F101"
+      ],
+      "verificationSteps": [
+        "1. Research GitHub Attestation API requirements",
+        "2. Configure GitHub OIDC provider in workflows",
+        "3. Add attestation generation step to build workflow",
+        "4. Sign build artifacts (Docker images, npm packages, binaries)",
+        "5. Configure attestation verification in deployment pipeline",
+        "6. Document attestation verification process",
+        "7. Test attestation generation and verification"
+      ],
+      "acceptanceCriteria": [
+        "All production artifacts are signed with GitHub Attestations",
+        "Attestations include build provenance (commit SHA, workflow, timestamp)",
+        "Deployment pipeline verifies attestations before deployment",
+        "Attestation verification failures block deployment",
+        "Documentation includes verification instructions",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Test attestation generation configuration",
+        "integration": "Test full attestation workflow in CI",
+        "e2e": "Test deployment with attestation verification"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy.yml",
+        "docs/security/attestation.md"
+      ],
+      "blockers": [],
+      "notes": "Provides cryptographic proof of build integrity and supply chain security. Critical for enterprise trust and compliance."
+    },
+    {
+      "id": "F103",
+      "phase": 1,
+      "name": "Accessibility Linting Configuration",
+      "description": "Configure automated accessibility checking with eslint-plugin-jsx-a11y, axe-core, and pa11y for WCAG 2.1 AA compliance",
+      "status": "pending",
+      "dependencies": [
+        "F018",
+        "F100"
+      ],
+      "verificationSteps": [
+        "1. Install eslint-plugin-jsx-a11y",
+        "2. Configure a11y rules (WCAG 2.1 AA baseline)",
+        "3. Integrate axe-core into component tests",
+        "4. Add pa11y to E2E test suite",
+        "5. Add a11y checks to pre-commit hooks",
+        "6. Add a11y checks to CI pipeline",
+        "7. Document accessibility standards and testing approach",
+        "8. Fix existing a11y violations"
+      ],
+      "acceptanceCriteria": [
+        "eslint-plugin-jsx-a11y configured with WCAG 2.1 AA rules",
+        "axe-core integrated into Jest/Vitest component tests",
+        "pa11y integrated into E2E tests",
+        "No a11y violations in pre-commit or CI",
+        "All interactive elements have proper ARIA labels",
+        "All form inputs have associated labels",
+        "Color contrast meets WCAG AA standards",
+        "Keyboard navigation fully functional",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "axe-core tests run on all components",
+        "integration": "Integration tests include a11y assertions",
+        "e2e": "pa11y scans all critical user flows"
+      },
+      "filesAffected": [
+        ".eslintrc.json",
+        "vitest.config.ts",
+        "playwright.config.ts",
+        "docs/accessibility.md"
+      ],
+      "blockers": [],
+      "notes": "Accessibility is mandatory for EU compliance and merchant trust. WCAG 2.1 AA is the baseline standard."
     }
   ],
   "environmentSetup": {
@@ -3725,7 +3960,7 @@
     "completedFeatures": [],
     "inProgressFeatures": [],
     "blockedFeatures": [],
-    "totalFeatures": 100,
+    "totalFeatures": 104,
     "completionPercentage": 0,
     "lastUpdated": "2026-02-06T00:00:00Z",
     "sessionHistory": []
