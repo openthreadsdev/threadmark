@@ -1,0 +1,26 @@
+[2026-02-06] Restructured PRD.json for agent-optimized task tracking
+- Transformed 7 phases into 100 granular features with verification steps (F000-F099)
+- Added environmentSetup, progressTracking, features[] sections
+- Preserved original PRD structure in originalPRD section
+- Created init.sh script for local environment automation
+- Updated ralph-once.sh to reference PRD.json instead of PRD.md
+- Status: Ready for agent-driven implementation
+
+Features breakdown:
+- Phase 0 (Project Definition): F000-F007 (8 features)
+- Phase 1 (Architecture): F008-F020 (13 features)
+- Phase 2 (Shopify Integration): F021-F038 (18 features)
+- Phase 3 (Data Model & API): F039-F056 (18 features)
+- Phase 4 (Compliance UI): F057-F069 (13 features)
+- Phase 5 (Exports & Public Pages): F070-F081 (12 features)
+- Phase 6 (Production Hardening): F082-F099 (18 features)
+
+Next task: F000 - Repository Initialization
+
+Run ./ralph-once.sh to start implementing features one at a time.
+
+[2026-02-10] F000 - Repository Initialization (PASSES)
+- Initialized git repository with `git init`
+- Created .gitignore with entries for: node_modules, build outputs, env files, IDE files, OS files, logs, coverage, Turbo cache, Prisma local DBs, Docker overrides, and temp files
+- Updated F000 status to "passes" in PRD.json
+- Next task: F001 - Environment Variable Template

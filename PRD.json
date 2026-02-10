@@ -1,0 +1,5173 @@
+{
+  "projectMetadata": {
+    "projectName": "Compliance-Ready Product Records Platform",
+    "version": "2.0.0-agent-optimized",
+    "lastUpdated": "2026-02-06",
+    "projectLead": "OpenThreads.dev",
+    "distributionWedge": "Shopify",
+    "restructuredFor": "Long-running agent workflows per Anthropic recommendations"
+  },
+  "productScope": {
+    "mvp": {
+      "description": "Production-ready, enterprise-grade compliance data management platform embedded within Shopify admin, enabling EU-facing merchants to track, manage, and export product compliance information.",
+      "coreFeatures": [
+        "Shopify embedded app with OAuth and session management",
+        "Automated product sync via webhooks and scheduled reconciliation",
+        "Compliance data editor with validation",
+        "Multi-material composition tracking with percentage validation",
+        "Certification and document attachment support",
+        "Audit trail for all compliance field changes",
+        "JSON and PDF exports with versioning",
+        "QR code generation for public compliance pages",
+        "Multi-tenant architecture (shop-level isolation)",
+        "Role-based access control (admin/editor/viewer)",
+        "Compliance status dashboard and reporting"
+      ]
+    },
+    "explicitExclusions": {
+      "description": "The following capabilities are explicitly OUT OF SCOPE for v1:",
+      "exclusions": [
+        "Payment processing, checkout, or cart functionality",
+        "Tax calculation engines",
+        "Shipping or logistics integrations",
+        "Blockchain or distributed ledger technology",
+        "AI/ML features (predictive compliance, auto-categorization)",
+        "Multi-currency support beyond display",
+        "Inventory management",
+        "Customer-facing storefront modifications",
+        "Third-party marketplace integrations (Amazon, eBay, etc.)",
+        "Real-time collaboration features",
+        "Mobile native apps (web-responsive only)",
+        "Automated regulatory compliance checking",
+        "Supply chain tracking beyond supplier reference"
+      ]
+    },
+    "boundaryNotes": "The platform focuses solely on compliance data management and export. All commerce functions remain with Shopify. Any regulatory interpretation or legal compliance validation is the merchant's responsibility."
+  },
+  "personas": [
+    {
+      "name": "EU-Facing Shopify Merchant",
+      "role": "Primary User",
+      "characteristics": {
+        "businessSize": "5-200 SKUs",
+        "industries": [
+          "Textiles",
+          "Apparel",
+          "Furniture",
+          "Home Goods"
+        ],
+        "geography": "EU-based or selling to EU customers",
+        "technicalSkill": "Low to medium (Shopify admin users)",
+        "complianceAwareness": "Medium to high (aware of EU regulations)"
+      },
+      "painPoints": [
+        "Manual tracking of compliance data in spreadsheets",
+        "No centralized system for product compliance records",
+        "Difficulty providing compliance documentation to customers",
+        "Risk of regulatory non-compliance and fines",
+        "Time-consuming audit preparation",
+        "Inconsistent data across products"
+      ],
+      "goals": [
+        "Centralize compliance data for all products",
+        "Easily update and maintain compliance records",
+        "Generate compliance exports for audits",
+        "Provide transparency to customers",
+        "Reduce compliance risk",
+        "Save time on administrative tasks"
+      ],
+      "successMetrics": [
+        "Time to complete compliance records per product",
+        "Percentage of products with complete compliance data",
+        "Time saved during audits",
+        "Customer inquiries resolved via public pages"
+      ]
+    },
+    {
+      "name": "Compliance Officer / Operations Manager",
+      "role": "Secondary User",
+      "characteristics": {
+        "businessSize": "50-200 SKUs (larger operations)",
+        "role": "Dedicated compliance or ops role",
+        "technicalSkill": "Medium",
+        "regulatoryKnowledge": "High"
+      },
+      "painPoints": [
+        "Need comprehensive audit trails",
+        "Require bulk data management capabilities",
+        "Must ensure data accuracy and completeness",
+        "Coordinate with multiple suppliers"
+      ],
+      "goals": [
+        "Maintain audit-ready compliance documentation",
+        "Monitor compliance status across product catalog",
+        "Generate regulatory reports",
+        "Track changes over time"
+      ]
+    }
+  ],
+  "complianceAttributes": {
+    "description": "Top 10 compliance attributes to support in v1, prioritized for EU textile/apparel/furniture regulations",
+    "attributes": [
+      {
+        "id": 1,
+        "name": "Material Composition",
+        "dataType": "structured_list",
+        "required": true,
+        "description": "List of materials with percentages (must sum to 100%)",
+        "validation": {
+          "percentageSum": 100,
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "example": [
+          {
+            "material": "Organic Cotton",
+            "percentage": 60
+          },
+          {
+            "material": "Recycled Polyester",
+            "percentage": 40
+          }
+        ],
+        "regulatoryContext": "EU Textile Regulation (EU) 1007/2011"
+      },
+      {
+        "id": 2,
+        "name": "Country of Manufacture",
+        "dataType": "string",
+        "required": true,
+        "description": "ISO country code or country name where product was manufactured",
+        "validation": {
+          "format": "ISO 3166-1 alpha-2 or country name"
+        },
+        "example": "PT (Portugal)",
+        "regulatoryContext": "EU Customs Code, General Product Safety Directive"
+      },
+      {
+        "id": 3,
+        "name": "Supplier Reference",
+        "dataType": "string",
+        "required": true,
+        "description": "Supplier name, ID, or reference code",
+        "validation": {
+          "maxLength": 255
+        },
+        "example": "ACME Textiles GmbH (SUP-2024-089)",
+        "regulatoryContext": "Supply chain traceability requirements"
+      },
+      {
+        "id": 4,
+        "name": "Certifications",
+        "dataType": "structured_list",
+        "required": false,
+        "description": "List of certifications with optional document attachments",
+        "validation": {
+          "maxItems": 10
+        },
+        "fields": [
+          {
+            "name": "certificationType",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "certificationBody",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "certificateNumber",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "issueDate",
+            "type": "date",
+            "required": false
+          },
+          {
+            "name": "expiryDate",
+            "type": "date",
+            "required": false
+          },
+          {
+            "name": "documentUrl",
+            "type": "url",
+            "required": false
+          }
+        ],
+        "example": [
+          {
+            "certificationType": "GOTS (Global Organic Textile Standard)",
+            "certificationBody": "Control Union",
+            "certificateNumber": "CU-12345",
+            "issueDate": "2024-01-15",
+            "expiryDate": "2025-01-15"
+          }
+        ],
+        "regulatoryContext": "Voluntary eco-labels and certifications"
+      },
+      {
+        "id": 5,
+        "name": "Care Instructions",
+        "dataType": "text",
+        "required": false,
+        "description": "Product care and maintenance instructions",
+        "validation": {
+          "maxLength": 1000
+        },
+        "example": "Machine wash cold, tumble dry low, do not bleach",
+        "regulatoryContext": "EU Textile Labelling Regulation"
+      },
+      {
+        "id": 6,
+        "name": "Recycled Content Percentage",
+        "dataType": "number",
+        "required": false,
+        "description": "Percentage of recycled materials (0-100)",
+        "validation": {
+          "min": 0,
+          "max": 100
+        },
+        "example": 40,
+        "regulatoryContext": "EU Green Claims Directive (proposed)"
+      },
+      {
+        "id": 7,
+        "name": "Product Safety Warnings",
+        "dataType": "text",
+        "required": false,
+        "description": "Safety warnings, age restrictions, hazard information",
+        "validation": {
+          "maxLength": 500
+        },
+        "example": "Not suitable for children under 3 years - choking hazard",
+        "regulatoryContext": "General Product Safety Directive 2001/95/EC"
+      },
+      {
+        "id": 8,
+        "name": "Environmental Impact Statement",
+        "dataType": "text",
+        "required": false,
+        "description": "Optional environmental impact or sustainability statement",
+        "validation": {
+          "maxLength": 1000
+        },
+        "example": "Carbon neutral manufacturing process, water usage reduced by 30%",
+        "regulatoryContext": "Corporate Sustainability Reporting Directive (CSRD)"
+      },
+      {
+        "id": 9,
+        "name": "Product Dimensions",
+        "dataType": "structured",
+        "required": false,
+        "description": "Physical dimensions (length, width, height, weight) with units",
+        "fields": [
+          {
+            "name": "length",
+            "type": "number",
+            "unit": "cm"
+          },
+          {
+            "name": "width",
+            "type": "number",
+            "unit": "cm"
+          },
+          {
+            "name": "height",
+            "type": "number",
+            "unit": "cm"
+          },
+          {
+            "name": "weight",
+            "type": "number",
+            "unit": "kg"
+          }
+        ],
+        "example": {
+          "length": 120,
+          "width": 80,
+          "height": 45,
+          "weight": 12.5
+        },
+        "regulatoryContext": "Packaging and transport regulations"
+      },
+      {
+        "id": 10,
+        "name": "Chemical Compliance",
+        "dataType": "structured_list",
+        "required": false,
+        "description": "Chemical compliance declarations (REACH, RoHS, etc.)",
+        "fields": [
+          {
+            "name": "regulation",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "compliant",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "notes",
+            "type": "text",
+            "required": false
+          },
+          {
+            "name": "testReportUrl",
+            "type": "url",
+            "required": false
+          }
+        ],
+        "example": [
+          {
+            "regulation": "REACH SVHC",
+            "compliant": true,
+            "notes": "No substances of very high concern detected"
+          }
+        ],
+        "regulatoryContext": "REACH Regulation (EC) 1907/2006"
+      }
+    ],
+    "futureConsiderations": [
+      "Digital Product Passport (DPP) requirements",
+      "Extended Producer Responsibility (EPR) data",
+      "Carbon footprint calculations",
+      "Repair and disassembly instructions"
+    ]
+  },
+  "enterpriseRequirements": {
+    "definitionOfDone": {
+      "description": "A feature or system component is considered 'enterprise-grade' when ALL of the following criteria are met:",
+      "criteria": [
+        {
+          "category": "Security",
+          "requirements": [
+            "OAuth 2.0 implementation with secure token storage",
+            "All webhook endpoints verify HMAC signatures",
+            "Secrets managed via environment variables or vault (never in code)",
+            "HTTPS/TLS required for all communications",
+            "Content Security Policy (CSP) headers for embedded app",
+            "SQL injection prevention via parameterized queries/ORM",
+            "XSS prevention via output encoding",
+            "CSRF protection for state-changing operations",
+            "Rate limiting to prevent abuse (per-tenant and global)",
+            "Input validation and sanitization on all endpoints",
+            "Principle of least privilege for Shopify API scopes"
+          ]
+        },
+        {
+          "category": "Audit Trail",
+          "requirements": [
+            "Append-only audit log for all compliance data changes",
+            "Audit entries include: timestamp, user ID, tenant ID, action, old value, new value",
+            "Audit log queryable and exportable",
+            "Immutable audit records (no updates or deletes)",
+            "Audit log retention policy documented and enforced"
+          ]
+        },
+        {
+          "category": "Observability",
+          "requirements": [
+            "Structured JSON logging with log levels (ERROR, WARN, INFO, DEBUG)",
+            "Request tracing with correlation IDs",
+            "Metrics instrumentation: request latency, error rates, webhook failures, job queue depth",
+            "Health check endpoints (/health, /readiness)",
+            "Application Performance Monitoring (APM) integration ready",
+            "Alerting rules defined for critical failures",
+            "Dashboard for monitoring webhook delivery and sync status"
+          ]
+        },
+        {
+          "category": "Backups and Disaster Recovery",
+          "requirements": [
+            "Automated daily database backups with point-in-time recovery",
+            "Backup retention: 30 days minimum",
+            "Backup restoration tested quarterly",
+            "Object storage (exports, attachments) replicated or backed up",
+            "Documented disaster recovery procedures (RTO/RPO targets)",
+            "Database migration rollback plan"
+          ]
+        },
+        {
+          "category": "Test Coverage",
+          "requirements": [
+            "Unit test coverage: ≥80% for business logic",
+            "Integration tests for all API endpoints",
+            "E2E tests for critical user flows (install, sync, edit, export)",
+            "Webhook handler idempotency tests",
+            "Load testing for webhook handlers and sync jobs",
+            "Security testing: basic SAST in CI, dependency scanning"
+          ]
+        },
+        {
+          "category": "Service Level Objectives (SLOs)",
+          "requirements": [
+            "API endpoint p99 latency: <500ms for read operations, <2s for write operations",
+            "Webhook processing latency: <30s from receipt to completion",
+            "Export generation: <60s for single product, <5 minutes for bulk",
+            "Uptime: 99.5% monthly (excluding scheduled maintenance)",
+            "Data sync accuracy: 99.9% (reconciliation catches drift)"
+          ]
+        },
+        {
+          "category": "Documentation",
+          "requirements": [
+            "README with local development setup",
+            "Architecture documentation with diagrams (Mermaid)",
+            "API documentation (OpenAPI spec)",
+            "Data model documentation (ERD, schema descriptions)",
+            "Operations runbook (troubleshooting, common issues)",
+            "Security posture documentation",
+            "Deployment and release process documented",
+            "ADRs (Architecture Decision Records) for major design choices"
+          ]
+        },
+        {
+          "category": "Multi-Tenancy",
+          "requirements": [
+            "Tenant isolation enforced at database query level (row-level security or middleware)",
+            "Tenant ID derived from authenticated Shopify session",
+            "No cross-tenant data leakage (validated via tests)",
+            "Tenant-scoped rate limiting",
+            "Tenant-scoped audit logs"
+          ]
+        },
+        {
+          "category": "Data Integrity",
+          "requirements": [
+            "Database constraints enforce referential integrity",
+            "Validation logic for all compliance fields",
+            "Transaction boundaries for operations requiring atomicity",
+            "Idempotent webhook handlers (duplicate webhook tolerance)",
+            "Data migration scripts tested and reversible"
+          ]
+        },
+        {
+          "category": "Compliance and Privacy",
+          "requirements": [
+            "GDPR-compliant data handling (deletion, export on request)",
+            "Privacy policy and data retention policy documented",
+            "PII handling documented (minimize collection)",
+            "Data processing agreement (DPA) ready",
+            "Webhook payload logging excludes sensitive customer data"
+          ]
+        }
+      ]
+    },
+    "nonFunctionalRequirements": {
+      "performance": {
+        "apiLatency": "p99 <500ms for reads, <2s for writes",
+        "webhookProcessing": "<30s end-to-end",
+        "exportGeneration": "<60s for single product",
+        "syncThroughput": "Handle 1000 products/minute during reconciliation"
+      },
+      "scalability": {
+        "tenants": "Support 1000+ concurrent tenants",
+        "productsPerTenant": "Handle up to 10,000 products per tenant efficiently",
+        "concurrentWebhooks": "Process 100 concurrent webhooks without degradation"
+      },
+      "reliability": {
+        "uptime": "99.5% monthly SLA",
+        "dataAccuracy": "99.9% sync accuracy with reconciliation",
+        "webhookReliability": "Retry failed webhooks with exponential backoff"
+      },
+      "security": {
+        "authentication": "OAuth 2.0 with Shopify",
+        "authorization": "Role-based access control (admin/editor/viewer)",
+        "dataEncryption": "TLS in transit, encryption at rest for sensitive fields",
+        "auditability": "Complete audit trail for all data changes"
+      },
+      "maintainability": {
+        "codeQuality": "Linting, type checking, code review required",
+        "testCoverage": "≥80% for business logic",
+        "documentation": "All public APIs and architectural decisions documented",
+        "deployment": "Zero-downtime deployments with rollback capability"
+      }
+    }
+  },
+  "riskRegister": [
+    {
+      "riskId": "R001",
+      "category": "Regulatory",
+      "risk": "Regulatory ambiguity and changing compliance requirements",
+      "description": "EU regulations for product compliance are complex and may change. Misinterpreting requirements or failing to update could result in non-compliant data structures.",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": [
+        "Clearly document that merchants are responsible for regulatory interpretation",
+        "Design flexible data model that can accommodate new fields",
+        "Include version tracking for compliance records",
+        "Monitor regulatory changes and communicate updates to users",
+        "Partner with legal/compliance advisors for v1 scope validation"
+      ],
+      "owner": "Product Lead"
+    },
+    {
+      "riskId": "R002",
+      "category": "Data Integrity",
+      "risk": "Data sync drift between Shopify and compliance platform",
+      "description": "Missed webhooks, rate limiting, or system downtime could cause compliance data to fall out of sync with Shopify products.",
+      "likelihood": "Medium",
+      "impact": "Medium",
+      "mitigation": [
+        "Implement scheduled reconciliation sync (nightly)",
+        "Monitor webhook delivery failures and alert on anomalies",
+        "Provide manual 'Force Resync' option for merchants",
+        "Log all sync operations for debugging",
+        "Design idempotent webhook handlers"
+      ],
+      "owner": "Engineering Lead"
+    },
+    {
+      "riskId": "R003",
+      "category": "Technical",
+      "risk": "Shopify API rate limits throttling operations",
+      "description": "Shopify enforces rate limits (40 requests/second standard). High-volume sync or webhook bursts could hit limits and cause failures.",
+      "likelihood": "High",
+      "impact": "Medium",
+      "mitigation": [
+        "Implement request queuing with exponential backoff",
+        "Monitor rate limit headers and throttle proactively",
+        "Use Shopify GraphQL API for bulk operations where possible",
+        "Batch operations during reconciliation sync",
+        "Test with realistic data volumes"
+      ],
+      "owner": "Engineering Lead"
+    },
+    {
+      "riskId": "R004",
+      "category": "Technical",
+      "risk": "Webhook delivery reliability issues",
+      "description": "Shopify webhooks may be delayed, duplicated, or dropped. Relying solely on webhooks could cause data inconsistency.",
+      "likelihood": "Medium",
+      "impact": "Medium",
+      "mitigation": [
+        "Implement idempotent webhook handlers",
+        "Use scheduled reconciliation as backup sync mechanism",
+        "Monitor webhook delivery metrics (Shopify Partner Dashboard)",
+        "Implement retry logic with exponential backoff",
+        "Log webhook receipt and processing for debugging"
+      ],
+      "owner": "Engineering Lead"
+    },
+    {
+      "riskId": "R005",
+      "category": "Security / Privacy",
+      "risk": "PII exposure or mishandling in public compliance pages",
+      "description": "Public compliance pages could inadvertently expose sensitive merchant or customer information if not carefully controlled.",
+      "likelihood": "Low",
+      "impact": "High",
+      "mitigation": [
+        "Default to private pages; require explicit merchant opt-in per product",
+        "Allow merchants to configure which fields are public vs. private",
+        "Exclude any PII from public pages by design",
+        "Implement access controls and rate limiting for public pages",
+        "Security review before launch"
+      ],
+      "owner": "Product + Engineering Lead"
+    },
+    {
+      "riskId": "R006",
+      "category": "Business",
+      "risk": "Shopify App Store review rejection or delays",
+      "description": "Shopify has strict app review requirements. Rejection could delay launch or require significant rework.",
+      "likelihood": "Medium",
+      "impact": "Medium",
+      "mitigation": [
+        "Review Shopify App Store requirements early in development",
+        "Request minimal scopes (avoid over-permissioning)",
+        "Ensure clear onboarding and value proposition in listing",
+        "Test install/uninstall flows thoroughly",
+        "Implement proper app/uninstalled webhook handling",
+        "Allocate buffer time for review iterations"
+      ],
+      "owner": "Product Lead"
+    },
+    {
+      "riskId": "R007",
+      "category": "Technical",
+      "risk": "Database performance degradation with large product catalogs",
+      "description": "Tenants with 10,000+ products could experience slow queries or sync timeouts if database not properly optimized.",
+      "likelihood": "Medium",
+      "impact": "Medium",
+      "mitigation": [
+        "Index critical columns (tenant_id, product_id, status)",
+        "Implement pagination for all list endpoints",
+        "Use cursor-based pagination for Shopify sync",
+        "Load test with realistic data volumes (10k products)",
+        "Monitor query performance and optimize slow queries",
+        "Consider read replicas if needed"
+      ],
+      "owner": "Engineering Lead"
+    },
+    {
+      "riskId": "R008",
+      "category": "Operations",
+      "risk": "Insufficient monitoring leading to undetected failures",
+      "description": "Without proper observability, critical issues (failed syncs, webhook backlogs) could go unnoticed and impact merchants.",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": [
+        "Implement comprehensive logging, metrics, and alerting from day one",
+        "Monitor webhook failure rates, sync job success rates, API error rates",
+        "Set up alerts for critical thresholds (e.g., >5% webhook failures)",
+        "Create operations dashboard for support team",
+        "Document runbooks for common failure scenarios"
+      ],
+      "owner": "Engineering + Ops Lead"
+    },
+    {
+      "riskId": "R009",
+      "category": "Business",
+      "risk": "Low adoption due to unclear value proposition or poor UX",
+      "description": "If merchants don't understand the value or find the app difficult to use, adoption will be low.",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": [
+        "Clear onboarding flow with value explanation",
+        "Simple, intuitive compliance editor UI",
+        "Provide templates or examples for common product types",
+        "In-app guidance and tooltips",
+        "User testing with target merchants before launch",
+        "Measure activation metrics and iterate"
+      ],
+      "owner": "Product Lead"
+    },
+    {
+      "riskId": "R010",
+      "category": "Compliance",
+      "risk": "GDPR data deletion requests not properly handled",
+      "description": "Failure to properly handle GDPR deletion requests could result in regulatory violations.",
+      "likelihood": "Low",
+      "impact": "High",
+      "mitigation": [
+        "Implement app/uninstalled webhook with data deletion",
+        "Provide configurable data retention policy",
+        "Support manual data deletion requests",
+        "Document data handling in privacy policy",
+        "Audit data deletion workflows"
+      ],
+      "owner": "Engineering + Legal"
+    }
+  ],
+  "features": [
+    {
+      "id": "F000",
+      "phase": 0,
+      "name": "Repository Initialization",
+      "description": "Initialize git repository with .gitignore",
+      "status": "passes",
+      "dependencies": [],
+      "verificationSteps": [
+        "1. Run git init",
+        "2. Create .gitignore",
+        "3. Initial commit"
+      ],
+      "acceptanceCriteria": [
+        "Repository Initialization complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".gitignore"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F001",
+      "phase": 0,
+      "name": "Environment Variable Template",
+      "description": "Create .env.example with all required variables",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Create .env.example",
+        "2. Document all variables",
+        "3. Add comments"
+      ],
+      "acceptanceCriteria": [
+        "Environment Variable Template complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".env.example"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F002",
+      "phase": 0,
+      "name": "Docker Compose Configuration",
+      "description": "Create docker-compose.yml for Postgres and Redis",
+      "status": "pending",
+      "dependencies": [
+        "F001"
+      ],
+      "verificationSteps": [
+        "1. Create docker-compose.yml",
+        "2. Configure services",
+        "3. Test docker-compose up"
+      ],
+      "acceptanceCriteria": [
+        "Docker Compose Configuration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docker-compose.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F003",
+      "phase": 0,
+      "name": "Entity Relationship Diagram",
+      "description": "Design database schema with ERD",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Create ERD diagram",
+        "2. Document tables",
+        "3. Show relationships"
+      ],
+      "acceptanceCriteria": [
+        "Entity Relationship Diagram complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/schema/erd.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F004",
+      "phase": 0,
+      "name": "Risk Register Documentation",
+      "description": "Document all project risks",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Create risk register",
+        "2. Document mitigations",
+        "3. Assign owners"
+      ],
+      "acceptanceCriteria": [
+        "Risk Register Documentation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/risks.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F005",
+      "phase": 0,
+      "name": "User Persona Validation",
+      "description": "Validate personas with target merchants",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Document personas",
+        "2. Conduct interviews",
+        "3. Update based on feedback"
+      ],
+      "acceptanceCriteria": [
+        "User Persona Validation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/personas.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F006",
+      "phase": 0,
+      "name": "Scope Boundary Document",
+      "description": "Create explicit scope boundary doc",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Document in-scope features",
+        "2. Document exclusions",
+        "3. Get stakeholder sign-off"
+      ],
+      "acceptanceCriteria": [
+        "Scope Boundary Document complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/scope.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F007",
+      "phase": 0,
+      "name": "Non-Functional Requirements Checklist",
+      "description": "Document NFRs for enterprise quality",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Document security NFRs",
+        "2. Document performance SLOs",
+        "3. Document compliance requirements"
+      ],
+      "acceptanceCriteria": [
+        "Non-Functional Requirements Checklist complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/nfr-checklist.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F008",
+      "phase": 1,
+      "name": "Monorepo Setup",
+      "description": "Initialize monorepo with Turborepo or Nx",
+      "status": "pending",
+      "dependencies": [
+        "F000"
+      ],
+      "verificationSteps": [
+        "1. Choose and document tool",
+        "2. Initialize monorepo",
+        "3. Configure workspaces",
+        "4. Test builds"
+      ],
+      "acceptanceCriteria": [
+        "Monorepo Setup complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "package.json",
+        "turbo.json"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F009",
+      "phase": 1,
+      "name": "Database ORM Setup",
+      "description": "Configure Prisma or Drizzle ORM",
+      "status": "pending",
+      "dependencies": [
+        "F002",
+        "F003"
+      ],
+      "verificationSteps": [
+        "1. Choose ORM",
+        "2. Initialize schema",
+        "3. Configure migrations",
+        "4. Test queries"
+      ],
+      "acceptanceCriteria": [
+        "Database ORM Setup complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema.prisma"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F010",
+      "phase": 1,
+      "name": "Architecture Diagrams",
+      "description": "Create system architecture diagrams",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create system diagram",
+        "2. Document data flows",
+        "3. Review with team"
+      ],
+      "acceptanceCriteria": [
+        "Architecture Diagrams complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/architecture/system-overview.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F011",
+      "phase": 1,
+      "name": "OpenAPI Spec Skeleton",
+      "description": "Create OpenAPI 3.0 spec skeleton",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create spec file",
+        "2. Define security schemes",
+        "3. Add placeholder endpoints",
+        "4. Validate spec"
+      ],
+      "acceptanceCriteria": [
+        "OpenAPI Spec Skeleton complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/openapi.yaml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F012",
+      "phase": 1,
+      "name": "Logging Infrastructure",
+      "description": "Set up structured JSON logging",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Install logging library",
+        "2. Configure JSON output",
+        "3. Add correlation IDs",
+        "4. Test across apps"
+      ],
+      "acceptanceCriteria": [
+        "Logging Infrastructure complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/logger.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F013",
+      "phase": 1,
+      "name": "RBAC Role Definitions",
+      "description": "Define admin/editor/viewer roles",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define roles",
+        "2. Create permissions matrix",
+        "3. Build middleware",
+        "4. Document in docs/security/rbac.md"
+      ],
+      "acceptanceCriteria": [
+        "RBAC Role Definitions complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/rbac/roles.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F014",
+      "phase": 1,
+      "name": "Rate Limiting Infrastructure",
+      "description": "Implement Redis-backed rate limiting",
+      "status": "pending",
+      "dependencies": [
+        "F002"
+      ],
+      "verificationSteps": [
+        "1. Install rate limit library",
+        "2. Configure Redis backend",
+        "3. Set tenant and global limits",
+        "4. Test enforcement"
+      ],
+      "acceptanceCriteria": [
+        "Rate Limiting Infrastructure complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/middleware/rate-limit.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F015",
+      "phase": 1,
+      "name": "Input Validation Schemas",
+      "description": "Create Zod validation schemas",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Install Zod",
+        "2. Define compliance schemas",
+        "3. Add material % validation",
+        "4. Test validation"
+      ],
+      "acceptanceCriteria": [
+        "Input Validation Schemas complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/validation/schemas.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F016",
+      "phase": 1,
+      "name": "Local Development Documentation",
+      "description": "Create comprehensive README",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Document prerequisites",
+        "2. Write setup instructions",
+        "3. Add troubleshooting",
+        "4. Test with new developer"
+      ],
+      "acceptanceCriteria": [
+        "Local Development Documentation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "README.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F017",
+      "phase": 1,
+      "name": "CI Pipeline Skeleton",
+      "description": "Set up GitHub Actions CI",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create workflow file",
+        "2. Add lint and typecheck jobs",
+        "3. Configure caching",
+        "4. Test with PR"
+      ],
+      "acceptanceCriteria": [
+        "CI Pipeline Skeleton complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F018",
+      "phase": 1,
+      "name": "TypeScript Configuration",
+      "description": "Configure TypeScript for monorepo",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create root tsconfig",
+        "2. Configure strict mode",
+        "3. Set up path aliases",
+        "4. Test type checking"
+      ],
+      "acceptanceCriteria": [
+        "TypeScript Configuration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "tsconfig.json"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F019",
+      "phase": 1,
+      "name": "Package Scripts Setup",
+      "description": "Configure npm scripts for dev/build/test",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Add dev script",
+        "2. Add build script",
+        "3. Add test script",
+        "4. Document in README"
+      ],
+      "acceptanceCriteria": [
+        "Package Scripts Setup complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "package.json"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F020",
+      "phase": 1,
+      "name": "Environment Setup Documentation",
+      "description": "Document dev/staging/prod environments",
+      "status": "pending",
+      "dependencies": [
+        "F016"
+      ],
+      "verificationSteps": [
+        "1. Document each environment",
+        "2. Explain config differences",
+        "3. Document secret management"
+      ],
+      "acceptanceCriteria": [
+        "Environment Setup Documentation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/environments.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F021",
+      "phase": 2,
+      "name": "Shopify Remix App Init",
+      "description": "Initialize Shopify Remix embedded app",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Install Shopify Remix template",
+        "2. Configure App Bridge",
+        "3. Test embedded app"
+      ],
+      "acceptanceCriteria": [
+        "Shopify Remix App Init complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/root.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F022",
+      "phase": 2,
+      "name": "OAuth 2.0 Implementation",
+      "description": "Implement Shopify OAuth flow",
+      "status": "pending",
+      "dependencies": [
+        "F021"
+      ],
+      "verificationSteps": [
+        "1. Create OAuth routes",
+        "2. Store encrypted tokens",
+        "3. Test auth flow"
+      ],
+      "acceptanceCriteria": [
+        "OAuth 2.0 Implementation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/auth.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F023",
+      "phase": 2,
+      "name": "Session Middleware",
+      "description": "Create session management middleware",
+      "status": "pending",
+      "dependencies": [
+        "F022"
+      ],
+      "verificationSteps": [
+        "1. Build session middleware",
+        "2. Implement encryption",
+        "3. Test persistence"
+      ],
+      "acceptanceCriteria": [
+        "Session Middleware complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/middleware/session.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F024",
+      "phase": 2,
+      "name": "Webhook Infrastructure",
+      "description": "Set up webhook endpoints with HMAC",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Create webhook routes",
+        "2. Implement HMAC verification",
+        "3. Test signature validation"
+      ],
+      "acceptanceCriteria": [
+        "Webhook Infrastructure complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/webhooks.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F025",
+      "phase": 2,
+      "name": "Products Create Webhook",
+      "description": "Handle products/create webhook",
+      "status": "pending",
+      "dependencies": [
+        "F024"
+      ],
+      "verificationSteps": [
+        "1. Create handler",
+        "2. Store product data",
+        "3. Test end-to-end"
+      ],
+      "acceptanceCriteria": [
+        "Products Create Webhook complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/webhooks/products-create.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F026",
+      "phase": 2,
+      "name": "Products Update Webhook",
+      "description": "Handle products/update with idempotency",
+      "status": "pending",
+      "dependencies": [
+        "F024"
+      ],
+      "verificationSteps": [
+        "1. Create update handler",
+        "2. Implement idempotency",
+        "3. Test duplicate handling"
+      ],
+      "acceptanceCriteria": [
+        "Products Update Webhook complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/webhooks/products-update.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F027",
+      "phase": 2,
+      "name": "Products Delete Webhook",
+      "description": "Handle products/delete with soft delete",
+      "status": "pending",
+      "dependencies": [
+        "F024"
+      ],
+      "verificationSteps": [
+        "1. Create delete handler",
+        "2. Implement soft delete",
+        "3. Test deletion"
+      ],
+      "acceptanceCriteria": [
+        "Products Delete Webhook complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/webhooks/products-delete.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F028",
+      "phase": 2,
+      "name": "App Uninstalled Webhook",
+      "description": "Handle app/uninstalled for cleanup",
+      "status": "pending",
+      "dependencies": [
+        "F024"
+      ],
+      "verificationSteps": [
+        "1. Create handler",
+        "2. Implement retention policy",
+        "3. Test GDPR compliance"
+      ],
+      "acceptanceCriteria": [
+        "App Uninstalled Webhook complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/webhooks/app-uninstalled.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F029",
+      "phase": 2,
+      "name": "Job Queue Setup",
+      "description": "Configure BullMQ with Redis",
+      "status": "pending",
+      "dependencies": [
+        "F002"
+      ],
+      "verificationSteps": [
+        "1. Install BullMQ",
+        "2. Create queues",
+        "3. Test job processing"
+      ],
+      "acceptanceCriteria": [
+        "Job Queue Setup complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/queue.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F030",
+      "phase": 2,
+      "name": "Webhook Job Processor",
+      "description": "Process webhooks in background",
+      "status": "pending",
+      "dependencies": [
+        "F029"
+      ],
+      "verificationSteps": [
+        "1. Create processor",
+        "2. Handle events",
+        "3. Test async processing"
+      ],
+      "acceptanceCriteria": [
+        "Webhook Job Processor complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/webhook-processor.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F031",
+      "phase": 2,
+      "name": "Reconciliation Sync Job",
+      "description": "Scheduled product reconciliation",
+      "status": "pending",
+      "dependencies": [
+        "F009",
+        "F029"
+      ],
+      "verificationSteps": [
+        "1. Create sync job",
+        "2. Implement cursor pagination",
+        "3. Test with 1000+ products"
+      ],
+      "acceptanceCriteria": [
+        "Reconciliation Sync Job complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/reconciliation-sync.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F032",
+      "phase": 2,
+      "name": "Shopify Rate Limit Handling",
+      "description": "Handle API rate limits",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Monitor rate headers",
+        "2. Implement backoff",
+        "3. Test under load"
+      ],
+      "acceptanceCriteria": [
+        "Shopify Rate Limit Handling complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/shopify/rate-limiter.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F033",
+      "phase": 2,
+      "name": "Billing API Integration",
+      "description": "Integrate Shopify Billing API",
+      "status": "pending",
+      "dependencies": [
+        "F022"
+      ],
+      "verificationSteps": [
+        "1. Create billing routes",
+        "2. Define subscription plans",
+        "3. Test charge creation"
+      ],
+      "acceptanceCriteria": [
+        "Billing API Integration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/billing.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F034",
+      "phase": 2,
+      "name": "Product List Admin UI",
+      "description": "Build product list view",
+      "status": "pending",
+      "dependencies": [
+        "F021"
+      ],
+      "verificationSteps": [
+        "1. Create list component",
+        "2. Add status badges",
+        "3. Implement search/filter"
+      ],
+      "acceptanceCriteria": [
+        "Product List Admin UI complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/products.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F035",
+      "phase": 2,
+      "name": "Admin UI Navigation",
+      "description": "Set up navigation and layout",
+      "status": "pending",
+      "dependencies": [
+        "F021"
+      ],
+      "verificationSteps": [
+        "1. Create navigation",
+        "2. Add Polaris design",
+        "3. Test routing"
+      ],
+      "acceptanceCriteria": [
+        "Admin UI Navigation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/Navigation.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F036",
+      "phase": 2,
+      "name": "Webhook Retry Logic",
+      "description": "Exponential backoff for failed webhooks",
+      "status": "pending",
+      "dependencies": [
+        "F024",
+        "F029"
+      ],
+      "verificationSteps": [
+        "1. Create retry job",
+        "2. Implement backoff",
+        "3. Test failure scenarios"
+      ],
+      "acceptanceCriteria": [
+        "Webhook Retry Logic complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/webhook-retry.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F037",
+      "phase": 2,
+      "name": "Webhook Monitoring Dashboard",
+      "description": "Monitor webhook delivery",
+      "status": "pending",
+      "dependencies": [
+        "F034"
+      ],
+      "verificationSteps": [
+        "1. Create dashboard",
+        "2. Show stats",
+        "3. Display failures"
+      ],
+      "acceptanceCriteria": [
+        "Webhook Monitoring Dashboard complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/webhooks/monitor.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F038",
+      "phase": 2,
+      "name": "Initial Product Sync",
+      "description": "Full sync on app install",
+      "status": "pending",
+      "dependencies": [
+        "F031"
+      ],
+      "verificationSteps": [
+        "1. Create initial sync",
+        "2. Handle large catalogs",
+        "3. Test with 10k products"
+      ],
+      "acceptanceCriteria": [
+        "Initial Product Sync complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/initial-sync.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F039",
+      "phase": 3,
+      "name": "Tenants Table Schema",
+      "description": "Create tenants table",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define schema",
+        "2. Add encryption",
+        "3. Create migration"
+      ],
+      "acceptanceCriteria": [
+        "Tenants Table Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/tenants.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F040",
+      "phase": 3,
+      "name": "Products Table Schema",
+      "description": "Create products table",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define schema",
+        "2. Add indexes",
+        "3. Create migration"
+      ],
+      "acceptanceCriteria": [
+        "Products Table Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/products.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F041",
+      "phase": 3,
+      "name": "Compliance Records Schema",
+      "description": "Create compliance_records table",
+      "status": "pending",
+      "dependencies": [
+        "F040"
+      ],
+      "verificationSteps": [
+        "1. Define JSONB schema",
+        "2. Create migration",
+        "3. Test validation"
+      ],
+      "acceptanceCriteria": [
+        "Compliance Records Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/compliance.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F042",
+      "phase": 3,
+      "name": "Audit Logs Schema",
+      "description": "Create immutable audit_logs table",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define append-only schema",
+        "2. Add constraints",
+        "3. Create migration"
+      ],
+      "acceptanceCriteria": [
+        "Audit Logs Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/audit.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F043",
+      "phase": 3,
+      "name": "Users Table Schema",
+      "description": "Create users table with roles",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define schema with roles",
+        "2. Create migration",
+        "3. Test role assignment"
+      ],
+      "acceptanceCriteria": [
+        "Users Table Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/users.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F044",
+      "phase": 3,
+      "name": "Exports Table Schema",
+      "description": "Create exports tracking table",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Define schema",
+        "2. Create migration",
+        "3. Test tracking"
+      ],
+      "acceptanceCriteria": [
+        "Exports Table Schema complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/exports.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F045",
+      "phase": 3,
+      "name": "Database Migrations",
+      "description": "Run all database migrations",
+      "status": "pending",
+      "dependencies": [
+        "F039",
+        "F040",
+        "F041",
+        "F042",
+        "F043",
+        "F044"
+      ],
+      "verificationSteps": [
+        "1. Run migrations up",
+        "2. Test rollback",
+        "3. Verify schema"
+      ],
+      "acceptanceCriteria": [
+        "Database Migrations complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/migrations/"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F046",
+      "phase": 3,
+      "name": "Tenant Isolation Middleware",
+      "description": "Enforce tenant-scoped queries",
+      "status": "pending",
+      "dependencies": [
+        "F039"
+      ],
+      "verificationSteps": [
+        "1. Create middleware",
+        "2. Test isolation",
+        "3. Prevent leaks"
+      ],
+      "acceptanceCriteria": [
+        "Tenant Isolation Middleware complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/middleware/tenant-isolation.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F047",
+      "phase": 3,
+      "name": "REST API GET /products",
+      "description": "List products endpoint",
+      "status": "pending",
+      "dependencies": [
+        "F040"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Add pagination",
+        "3. Test filtering"
+      ],
+      "acceptanceCriteria": [
+        "REST API GET /products complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/products/list.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F048",
+      "phase": 3,
+      "name": "REST API GET /products/:id",
+      "description": "Get single product",
+      "status": "pending",
+      "dependencies": [
+        "F040"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Test retrieval",
+        "3. Handle 404"
+      ],
+      "acceptanceCriteria": [
+        "REST API GET /products/:id complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/products/get.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F049",
+      "phase": 3,
+      "name": "REST API GET /products/:id/compliance",
+      "description": "Get compliance record",
+      "status": "pending",
+      "dependencies": [
+        "F041"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Test retrieval",
+        "3. Return full record"
+      ],
+      "acceptanceCriteria": [
+        "REST API GET /products/:id/compliance complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/products/compliance/get.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F050",
+      "phase": 3,
+      "name": "REST API PUT /products/:id/compliance",
+      "description": "Update compliance record",
+      "status": "pending",
+      "dependencies": [
+        "F041"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Validate input",
+        "3. Create audit log"
+      ],
+      "acceptanceCriteria": [
+        "REST API PUT /products/:id/compliance complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/products/compliance/update.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F051",
+      "phase": 3,
+      "name": "REST API GET /products/:id/audit",
+      "description": "Get audit history",
+      "status": "pending",
+      "dependencies": [
+        "F042"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Add pagination",
+        "3. Test filtering"
+      ],
+      "acceptanceCriteria": [
+        "REST API GET /products/:id/audit complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/products/audit.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F052",
+      "phase": 3,
+      "name": "Validation Middleware",
+      "description": "Request validation middleware",
+      "status": "pending",
+      "dependencies": [
+        "F015"
+      ],
+      "verificationSteps": [
+        "1. Create middleware",
+        "2. Use Zod schemas",
+        "3. Test validation"
+      ],
+      "acceptanceCriteria": [
+        "Validation Middleware complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/middleware/validation.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F053",
+      "phase": 3,
+      "name": "Material Composition Validation",
+      "description": "Validate materials sum to 100%",
+      "status": "pending",
+      "dependencies": [
+        "F015"
+      ],
+      "verificationSteps": [
+        "1. Implement validation",
+        "2. Test edge cases",
+        "3. Return clear errors"
+      ],
+      "acceptanceCriteria": [
+        "Material Composition Validation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/validation/materials.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F054",
+      "phase": 3,
+      "name": "Authorization Middleware",
+      "description": "Enforce RBAC",
+      "status": "pending",
+      "dependencies": [
+        "F013"
+      ],
+      "verificationSteps": [
+        "1. Create middleware",
+        "2. Check roles",
+        "3. Test access control"
+      ],
+      "acceptanceCriteria": [
+        "Authorization Middleware complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/middleware/authorization.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F055",
+      "phase": 3,
+      "name": "Audit Log Creation",
+      "description": "Auto-create audit logs",
+      "status": "pending",
+      "dependencies": [
+        "F042",
+        "F050"
+      ],
+      "verificationSteps": [
+        "1. Create middleware",
+        "2. Log all changes",
+        "3. Test atomicity"
+      ],
+      "acceptanceCriteria": [
+        "Audit Log Creation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/middleware/audit.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F056",
+      "phase": 3,
+      "name": "API Error Handling",
+      "description": "Consistent error responses",
+      "status": "pending",
+      "dependencies": [
+        "F047"
+      ],
+      "verificationSteps": [
+        "1. Create handler",
+        "2. Format responses",
+        "3. Log errors"
+      ],
+      "acceptanceCriteria": [
+        "API Error Handling complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/middleware/error-handler.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F057",
+      "phase": 4,
+      "name": "Product List Component",
+      "description": "Searchable product list",
+      "status": "pending",
+      "dependencies": [
+        "F034"
+      ],
+      "verificationSteps": [
+        "1. Create component",
+        "2. Add search",
+        "3. Add filters"
+      ],
+      "acceptanceCriteria": [
+        "Product List Component complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/ProductList.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F058",
+      "phase": 4,
+      "name": "Compliance Status Badge",
+      "description": "Status badge component",
+      "status": "pending",
+      "dependencies": [
+        "F057"
+      ],
+      "verificationSteps": [
+        "1. Create badge",
+        "2. Style states",
+        "3. Test display"
+      ],
+      "acceptanceCriteria": [
+        "Compliance Status Badge complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/StatusBadge.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F059",
+      "phase": 4,
+      "name": "Compliance Editor Form",
+      "description": "Compliance data editor",
+      "status": "pending",
+      "dependencies": [
+        "F034"
+      ],
+      "verificationSteps": [
+        "1. Create form",
+        "2. Add validation",
+        "3. Test submission"
+      ],
+      "acceptanceCriteria": [
+        "Compliance Editor Form complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/products/$id/edit.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F060",
+      "phase": 4,
+      "name": "Material Composition Editor",
+      "description": "Material input with % validation",
+      "status": "pending",
+      "dependencies": [
+        "F059"
+      ],
+      "verificationSteps": [
+        "1. Create component",
+        "2. Validate 100% sum",
+        "3. Test edge cases"
+      ],
+      "acceptanceCriteria": [
+        "Material Composition Editor complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/MaterialEditor.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F061",
+      "phase": 4,
+      "name": "Certifications Editor",
+      "description": "Certifications list editor",
+      "status": "pending",
+      "dependencies": [
+        "F059"
+      ],
+      "verificationSteps": [
+        "1. Create editor",
+        "2. Support multiple certs",
+        "3. Test CRUD"
+      ],
+      "acceptanceCriteria": [
+        "Certifications Editor complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/CertificationsEditor.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F062",
+      "phase": 4,
+      "name": "Compliance Checklist Widget",
+      "description": "Completion checklist",
+      "status": "pending",
+      "dependencies": [
+        "F059"
+      ],
+      "verificationSteps": [
+        "1. Create widget",
+        "2. Show progress",
+        "3. Highlight missing"
+      ],
+      "acceptanceCriteria": [
+        "Compliance Checklist Widget complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/ComplianceChecklist.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F063",
+      "phase": 4,
+      "name": "Audit History View",
+      "description": "Display audit log",
+      "status": "pending",
+      "dependencies": [
+        "F034"
+      ],
+      "verificationSteps": [
+        "1. Create view",
+        "2. Format changes",
+        "3. Add filtering"
+      ],
+      "acceptanceCriteria": [
+        "Audit History View complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/products/$id/audit.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F064",
+      "phase": 4,
+      "name": "File Upload Component",
+      "description": "Upload for certifications",
+      "status": "pending",
+      "dependencies": [
+        "F061"
+      ],
+      "verificationSteps": [
+        "1. Create uploader",
+        "2. Validate files",
+        "3. Test upload"
+      ],
+      "acceptanceCriteria": [
+        "File Upload Component complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/FileUpload.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F065",
+      "phase": 4,
+      "name": "Form Validation UI",
+      "description": "Inline validation feedback",
+      "status": "pending",
+      "dependencies": [
+        "F059"
+      ],
+      "verificationSteps": [
+        "1. Create hook",
+        "2. Show errors inline",
+        "3. Test UX"
+      ],
+      "acceptanceCriteria": [
+        "Form Validation UI complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/hooks/useValidation.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F066",
+      "phase": 4,
+      "name": "Auto-save Draft Mode",
+      "description": "Auto-save for forms",
+      "status": "pending",
+      "dependencies": [
+        "F059"
+      ],
+      "verificationSteps": [
+        "1. Create auto-save",
+        "2. Debounce saves",
+        "3. Test recovery"
+      ],
+      "acceptanceCriteria": [
+        "Auto-save Draft Mode complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/hooks/useAutoSave.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F067",
+      "phase": 4,
+      "name": "Bulk Actions UI",
+      "description": "Bulk operations",
+      "status": "pending",
+      "dependencies": [
+        "F057"
+      ],
+      "verificationSteps": [
+        "1. Create bulk select",
+        "2. Add actions",
+        "3. Test operations"
+      ],
+      "acceptanceCriteria": [
+        "Bulk Actions UI complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/BulkActions.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F068",
+      "phase": 4,
+      "name": "Search and Filter UI",
+      "description": "Search and filtering",
+      "status": "pending",
+      "dependencies": [
+        "F057"
+      ],
+      "verificationSteps": [
+        "1. Create search",
+        "2. Add filters",
+        "3. Test performance"
+      ],
+      "acceptanceCriteria": [
+        "Search and Filter UI complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/components/SearchFilter.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F069",
+      "phase": 4,
+      "name": "Mobile Responsive Design",
+      "description": "Mobile-responsive UI",
+      "status": "pending",
+      "dependencies": [
+        "F057"
+      ],
+      "verificationSteps": [
+        "1. Add responsive CSS",
+        "2. Test on mobile",
+        "3. Verify usability"
+      ],
+      "acceptanceCriteria": [
+        "Mobile Responsive Design complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/styles/"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F070",
+      "phase": 5,
+      "name": "Export Job System",
+      "description": "Background export jobs",
+      "status": "pending",
+      "dependencies": [
+        "F029"
+      ],
+      "verificationSteps": [
+        "1. Create export job",
+        "2. Queue jobs",
+        "3. Test completion"
+      ],
+      "acceptanceCriteria": [
+        "Export Job System complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/export.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F071",
+      "phase": 5,
+      "name": "JSON Export Generator",
+      "description": "Generate JSON exports",
+      "status": "pending",
+      "dependencies": [
+        "F070"
+      ],
+      "verificationSteps": [
+        "1. Create generator",
+        "2. Format JSON",
+        "3. Test output"
+      ],
+      "acceptanceCriteria": [
+        "JSON Export Generator complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/generators/json-export.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F072",
+      "phase": 5,
+      "name": "PDF Export Generator",
+      "description": "Generate PDF exports",
+      "status": "pending",
+      "dependencies": [
+        "F070"
+      ],
+      "verificationSteps": [
+        "1. Install PDF library",
+        "2. Create template",
+        "3. Test generation"
+      ],
+      "acceptanceCriteria": [
+        "PDF Export Generator complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/generators/pdf-export.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F073",
+      "phase": 5,
+      "name": "S3 Storage Integration",
+      "description": "S3 for file storage",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Configure S3",
+        "2. Implement upload",
+        "3. Test signed URLs"
+      ],
+      "acceptanceCriteria": [
+        "S3 Storage Integration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/storage/s3.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F074",
+      "phase": 5,
+      "name": "Export Upload to Storage",
+      "description": "Upload exports to S3",
+      "status": "pending",
+      "dependencies": [
+        "F070",
+        "F073"
+      ],
+      "verificationSteps": [
+        "1. Upload files",
+        "2. Generate URLs",
+        "3. Test access"
+      ],
+      "acceptanceCriteria": [
+        "Export Upload to Storage complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/export-upload.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F075",
+      "phase": 5,
+      "name": "Export Status API",
+      "description": "Check export status",
+      "status": "pending",
+      "dependencies": [
+        "F044"
+      ],
+      "verificationSteps": [
+        "1. Create endpoint",
+        "2. Return status",
+        "3. Test polling"
+      ],
+      "acceptanceCriteria": [
+        "Export Status API complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/exports/status.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F076",
+      "phase": 5,
+      "name": "Export Download API",
+      "description": "Signed download URLs",
+      "status": "pending",
+      "dependencies": [
+        "F073"
+      ],
+      "verificationSteps": [
+        "1. Generate signed URLs",
+        "2. Set expiry",
+        "3. Test download"
+      ],
+      "acceptanceCriteria": [
+        "Export Download API complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/exports/download.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F077",
+      "phase": 5,
+      "name": "QR Code Generator",
+      "description": "Generate QR codes",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Install library",
+        "2. Generate codes",
+        "3. Test scanning"
+      ],
+      "acceptanceCriteria": [
+        "QR Code Generator complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/shared/qr/generator.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F078",
+      "phase": 5,
+      "name": "Public Compliance Pages",
+      "description": "Public product pages",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create public app",
+        "2. Render compliance",
+        "3. Test access"
+      ],
+      "acceptanceCriteria": [
+        "Public Compliance Pages complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/public/pages/[productId].tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F079",
+      "phase": 5,
+      "name": "Public Page Configuration",
+      "description": "Configure public fields",
+      "status": "pending",
+      "dependencies": [
+        "F078"
+      ],
+      "verificationSteps": [
+        "1. Create settings",
+        "2. Field selection",
+        "3. Test privacy"
+      ],
+      "acceptanceCriteria": [
+        "Public Page Configuration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/shopify-admin/app/routes/settings/public-pages.tsx"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F080",
+      "phase": 5,
+      "name": "Export Versioning",
+      "description": "Track export versions",
+      "status": "pending",
+      "dependencies": [
+        "F044"
+      ],
+      "verificationSteps": [
+        "1. Add versioning",
+        "2. Track changes",
+        "3. Test history"
+      ],
+      "acceptanceCriteria": [
+        "Export Versioning complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "packages/db/schema/export-versions.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F081",
+      "phase": 5,
+      "name": "Export Lifecycle Policy",
+      "description": "Auto-delete old exports",
+      "status": "pending",
+      "dependencies": [
+        "F073"
+      ],
+      "verificationSteps": [
+        "1. Create cleanup job",
+        "2. Set 30-day retention",
+        "3. Test deletion"
+      ],
+      "acceptanceCriteria": [
+        "Export Lifecycle Policy complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/export-cleanup.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F082",
+      "phase": 6,
+      "name": "CI Lint Stage",
+      "description": "Add linting to CI",
+      "status": "pending",
+      "dependencies": [
+        "F017"
+      ],
+      "verificationSteps": [
+        "1. Add lint job",
+        "2. Configure rules",
+        "3. Test failures"
+      ],
+      "acceptanceCriteria": [
+        "CI Lint Stage complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F083",
+      "phase": 6,
+      "name": "CI Test Stage",
+      "description": "Add tests to CI",
+      "status": "pending",
+      "dependencies": [
+        "F017"
+      ],
+      "verificationSteps": [
+        "1. Add test jobs",
+        "2. Run tests",
+        "3. Check coverage"
+      ],
+      "acceptanceCriteria": [
+        "CI Test Stage complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F084",
+      "phase": 6,
+      "name": "CI E2E Tests",
+      "description": "E2E tests in CI",
+      "status": "pending",
+      "dependencies": [
+        "F017"
+      ],
+      "verificationSteps": [
+        "1. Setup Playwright",
+        "2. Run E2E tests",
+        "3. Test flows"
+      ],
+      "acceptanceCriteria": [
+        "CI E2E Tests complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F085",
+      "phase": 6,
+      "name": "CI Security Scanning",
+      "description": "Security scans in CI",
+      "status": "pending",
+      "dependencies": [
+        "F017"
+      ],
+      "verificationSteps": [
+        "1. Add npm audit",
+        "2. Add SAST",
+        "3. Generate SBOM"
+      ],
+      "acceptanceCriteria": [
+        "CI Security Scanning complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F086",
+      "phase": 6,
+      "name": "Docker Build Pipeline",
+      "description": "Build Docker images",
+      "status": "pending",
+      "dependencies": [
+        "F017"
+      ],
+      "verificationSteps": [
+        "1. Create Dockerfiles",
+        "2. Build images",
+        "3. Push to registry"
+      ],
+      "acceptanceCriteria": [
+        "Docker Build Pipeline complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/ci.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F087",
+      "phase": 6,
+      "name": "Staging Deployment",
+      "description": "Auto-deploy to staging",
+      "status": "pending",
+      "dependencies": [
+        "F086"
+      ],
+      "verificationSteps": [
+        "1. Create workflow",
+        "2. Deploy on merge",
+        "3. Run smoke tests"
+      ],
+      "acceptanceCriteria": [
+        "Staging Deployment complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/deploy-staging.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F088",
+      "phase": 6,
+      "name": "Production Deployment",
+      "description": "Manual deploy to prod",
+      "status": "pending",
+      "dependencies": [
+        "F087"
+      ],
+      "verificationSteps": [
+        "1. Create workflow",
+        "2. Require approval",
+        "3. Test rollback"
+      ],
+      "acceptanceCriteria": [
+        "Production Deployment complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        ".github/workflows/deploy-production.yml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F089",
+      "phase": 6,
+      "name": "Database Backup Automation",
+      "description": "Automated backups",
+      "status": "pending",
+      "dependencies": [
+        "F009"
+      ],
+      "verificationSteps": [
+        "1. Enable backups",
+        "2. Set 30-day retention",
+        "3. Test restore"
+      ],
+      "acceptanceCriteria": [
+        "Database Backup Automation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/operations/backups.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F090",
+      "phase": 6,
+      "name": "Monitoring Setup",
+      "description": "Application monitoring",
+      "status": "pending",
+      "dependencies": [
+        "F012"
+      ],
+      "verificationSteps": [
+        "1. Set up logging",
+        "2. Configure metrics",
+        "3. Create dashboards"
+      ],
+      "acceptanceCriteria": [
+        "Monitoring Setup complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/operations/monitoring.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F091",
+      "phase": 6,
+      "name": "Alerting Configuration",
+      "description": "Critical alerts",
+      "status": "pending",
+      "dependencies": [
+        "F090"
+      ],
+      "verificationSteps": [
+        "1. Define alerts",
+        "2. Configure channels",
+        "3. Test notifications"
+      ],
+      "acceptanceCriteria": [
+        "Alerting Configuration complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/operations/alerts.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F092",
+      "phase": 6,
+      "name": "Health Check Endpoints",
+      "description": "/health and /readiness",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Create endpoints",
+        "2. Check dependencies",
+        "3. Test monitoring"
+      ],
+      "acceptanceCriteria": [
+        "Health Check Endpoints complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/routes/health.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F093",
+      "phase": 6,
+      "name": "Operations Runbook",
+      "description": "Operational procedures",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Document issues",
+        "2. Add troubleshooting",
+        "3. Include escalation"
+      ],
+      "acceptanceCriteria": [
+        "Operations Runbook complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/operations/runbook.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F094",
+      "phase": 6,
+      "name": "Security Hardening",
+      "description": "Complete security hardening",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Review security",
+        "2. Update secrets",
+        "3. Test CSP headers"
+      ],
+      "acceptanceCriteria": [
+        "Security Hardening complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/security/hardening.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F095",
+      "phase": 6,
+      "name": "Load Testing",
+      "description": "Perform load testing",
+      "status": "pending",
+      "dependencies": [
+        "F088"
+      ],
+      "verificationSteps": [
+        "1. Create load tests",
+        "2. Test webhooks",
+        "3. Verify SLOs"
+      ],
+      "acceptanceCriteria": [
+        "Load Testing complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "tests/load/scenarios.js"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F096",
+      "phase": 6,
+      "name": "API Documentation",
+      "description": "Complete API docs",
+      "status": "pending",
+      "dependencies": [
+        "F011"
+      ],
+      "verificationSteps": [
+        "1. Document endpoints",
+        "2. Add examples",
+        "3. Generate docs"
+      ],
+      "acceptanceCriteria": [
+        "API Documentation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/api/openapi.yaml"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F097",
+      "phase": 6,
+      "name": "User Documentation",
+      "description": "End-user documentation",
+      "status": "pending",
+      "dependencies": [
+        "F008"
+      ],
+      "verificationSteps": [
+        "1. Write user guide",
+        "2. Add screenshots",
+        "3. Create videos"
+      ],
+      "acceptanceCriteria": [
+        "User Documentation complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/user-guide/"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F098",
+      "phase": 6,
+      "name": "Data Retention Policy",
+      "description": "GDPR data retention",
+      "status": "pending",
+      "dependencies": [
+        "F028"
+      ],
+      "verificationSteps": [
+        "1. Create cleanup job",
+        "2. Implement 90-day retention",
+        "3. Test deletion"
+      ],
+      "acceptanceCriteria": [
+        "Data Retention Policy complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "apps/worker/jobs/data-retention.ts"
+      ],
+      "blockers": [],
+      "notes": ""
+    },
+    {
+      "id": "F099",
+      "phase": 6,
+      "name": "Final Production Checklist",
+      "description": "Pre-launch checklist",
+      "status": "pending",
+      "dependencies": [
+        "F082",
+        "F083",
+        "F084",
+        "F085",
+        "F086",
+        "F087",
+        "F088",
+        "F089",
+        "F090",
+        "F091",
+        "F092",
+        "F093",
+        "F094",
+        "F095",
+        "F096",
+        "F097",
+        "F098"
+      ],
+      "verificationSteps": [
+        "1. Review all features",
+        "2. Complete security audit",
+        "3. Get sign-off",
+        "4. Schedule launch"
+      ],
+      "acceptanceCriteria": [
+        "Final Production Checklist complete",
+        "Tests pass",
+        "Code reviewed"
+      ],
+      "testingRequirements": {
+        "unit": "Unit tests",
+        "integration": "Integration tests",
+        "e2e": "E2E tests"
+      },
+      "filesAffected": [
+        "docs/launch/checklist.md"
+      ],
+      "blockers": [],
+      "notes": ""
+    }
+  ],
+  "environmentSetup": {
+    "script": "init.sh",
+    "description": "Environment setup and validation script",
+    "services": [
+      "Postgres 15",
+      "Redis 7"
+    ],
+    "requiredEnvVars": [
+      "SHOPIFY_API_KEY",
+      "SHOPIFY_API_SECRET",
+      "DATABASE_URL",
+      "REDIS_URL",
+      "S3_BUCKET",
+      "S3_ACCESS_KEY",
+      "S3_SECRET_KEY",
+      "APP_URL",
+      "SCOPES"
+    ],
+    "verificationCommand": "npm run smoke-test",
+    "setupSteps": [
+      "Check Node.js ≥18",
+      "Validate .env",
+      "Start Docker Compose",
+      "Wait for services",
+      "Run migrations",
+      "Execute smoke tests"
+    ]
+  },
+  "progressTracking": {
+    "currentSession": null,
+    "completedFeatures": [],
+    "inProgressFeatures": [],
+    "blockedFeatures": [],
+    "totalFeatures": 100,
+    "completionPercentage": 0,
+    "lastUpdated": "2026-02-06T00:00:00Z",
+    "sessionHistory": []
+  },
+  "successMetrics": {
+    "technical": [
+      {
+        "metric": "API Uptime",
+        "target": "99.5% monthly"
+      },
+      {
+        "metric": "Webhook Processing Success Rate",
+        "target": "99% (with retry logic)"
+      },
+      {
+        "metric": "Sync Accuracy",
+        "target": "99.9% (verified by reconciliation)"
+      },
+      {
+        "metric": "Export Generation Time",
+        "target": "p95 <60 seconds for single product"
+      },
+      {
+        "metric": "Test Coverage",
+        "target": "≥80% for business logic"
+      }
+    ],
+    "business": [
+      {
+        "metric": "App Installations",
+        "target": "100 installs in first 3 months"
+      },
+      {
+        "metric": "Activation Rate",
+        "definition": "% of installs that complete at least one compliance record",
+        "target": "60%"
+      },
+      {
+        "metric": "Paid Conversion Rate",
+        "target": "20% of free tier users upgrade to paid within 30 days"
+      },
+      {
+        "metric": "Monthly Recurring Revenue (MRR)",
+        "target": "$2,000 MRR by month 6"
+      },
+      {
+        "metric": "Support Ticket Volume",
+        "target": "<5 tickets per 100 active users per month"
+      }
+    ],
+    "user": [
+      {
+        "metric": "Time to First Compliance Record",
+        "target": "<10 minutes from install"
+      },
+      {
+        "metric": "Compliance Completion Rate",
+        "definition": "% of products with 'export-ready' status",
+        "target": "50% of products per merchant within 30 days"
+      },
+      {
+        "metric": "User Satisfaction (NPS)",
+        "target": "NPS >40"
+      }
+    ]
+  },
+  "futureRoadmap": {
+    "v2Features": [
+      "Bulk import via CSV for compliance data",
+      "Advanced reporting and analytics dashboard",
+      "Multi-language support for public pages",
+      "Digital Product Passport (DPP) compliance",
+      "Supplier portal for collaborative data entry",
+      "AI-assisted compliance suggestions (material detection from images)",
+      "Integration with third-party certification providers",
+      "Carbon footprint calculation and tracking",
+      "Extended Producer Responsibility (EPR) reporting"
+    ]
+  },
+  "originalPRD": {
+    "note": "Complete original PRD preserved for reference",
+    "phases": [
+      {
+        "phaseNumber": 0,
+        "phaseName": "Project Definition and Guardrails",
+        "duration": "1 week",
+        "description": "Establish project scope, acceptance criteria, and comprehensive project definition package.",
+        "deliverables": [
+          {
+            "name": "Project Definition Document",
+            "format": "Markdown",
+            "contents": [
+              "Product scope (MVP features and explicit exclusions)",
+              "Primary user personas with pain points and goals",
+              "Top 10 compliance attributes specification",
+              "User flows (install, sync, edit, export, public pages)",
+              "Definition of Done for enterprise-grade quality",
+              "Risk register with mitigation strategies",
+              "Milestone plan with timelines"
+            ]
+          },
+          {
+            "name": "Scope Boundary Document",
+            "description": "Explicit list of what is IN SCOPE vs. OUT OF SCOPE",
+            "purpose": "Prevent scope creep and align stakeholders"
+          },
+          {
+            "name": "Non-Functional Requirements Checklist",
+            "description": "Security, audit trail, observability, backup, test coverage, SLOs"
+          }
+        ],
+        "acceptanceCriteria": [
+          "All stakeholders agree on MVP scope and exclusions",
+          "User personas validated with at least 3 target merchants",
+          "Compliance attributes reviewed by compliance advisor",
+          "Risk mitigation strategies documented for all high-impact risks"
+        ],
+        "keyDecisions": [
+          "Modular monolith vs. microservices architecture",
+          "Product-level vs. variant-level compliance records",
+          "Public pages in v1 or v2",
+          "Free tier vs. paid-only pricing model"
+        ]
+      },
+      {
+        "phaseNumber": 1,
+        "phaseName": "Architecture and Repository Scaffolding",
+        "duration": "2 weeks",
+        "description": "Design production architecture, create repository structure, and establish development environment.",
+        "deliverables": [
+          {
+            "name": "Architecture Diagram (Mermaid)",
+            "description": "System architecture showing Shopify, embedded app, webhooks, database, background jobs, exports, and public pages"
+          },
+          {
+            "name": "Data Flow Diagrams (Mermaid)",
+            "flows": [
+              "OAuth installation and authentication",
+              "Product sync (webhook-triggered and scheduled)",
+              "Compliance data editing with audit trail",
+              "Export generation and delivery"
+            ]
+          },
+          {
+            "name": "Repository Structure",
+            "structure": {
+              "monorepo": true,
+              "layout": [
+                "/apps/shopify-admin (Remix embedded app)",
+                "/apps/api (REST API with OpenAPI spec)",
+                "/apps/worker (background jobs for sync and exports)",
+                "/packages/db (Prisma/Drizzle schema and migrations)",
+                "/packages/shared (shared types, utils, validation)",
+                "/docs (architecture, ADRs, runbooks)"
+              ]
+            }
+          },
+          {
+            "name": "Local Development Setup",
+            "tools": [
+              "Docker Compose (Postgres, Redis for jobs)",
+              "Shopify CLI for tunneling and testing",
+              "Environment variable templates (.env.example)",
+              "Seed data scripts for local testing"
+            ]
+          },
+          {
+            "name": "Environments Plan",
+            "environments": [
+              {
+                "name": "development",
+                "description": "Local developer machines with Shopify dev stores"
+              },
+              {
+                "name": "staging",
+                "description": "Cloud-hosted staging environment with test Shopify store"
+              },
+              {
+                "name": "production",
+                "description": "Production environment with live Shopify stores"
+              }
+            ],
+            "configManagement": "Environment variables injected via CI/CD secrets"
+          },
+          {
+            "name": "Enterprise Cross-Cutting Concerns Design",
+            "concerns": [
+              {
+                "concern": "Logging",
+                "approach": "Structured JSON logs with correlation IDs, log levels"
+              },
+              {
+                "concern": "Metrics",
+                "approach": "Prometheus-compatible metrics or APM (Datadog, New Relic)"
+              },
+              {
+                "concern": "Tracing",
+                "approach": "OpenTelemetry for distributed tracing (optional v1)"
+              },
+              {
+                "concern": "RBAC Model",
+                "approach": "Roles: admin (full access), editor (edit compliance), viewer (read-only)"
+              },
+              {
+                "concern": "Rate Limiting",
+                "approach": "Per-tenant and global rate limits using Redis-backed token bucket"
+              },
+              {
+                "concern": "Input Validation",
+                "approach": "Centralized validation schemas (Zod, Joi, or similar)"
+              }
+            ]
+          }
+        ],
+        "acceptanceCriteria": [
+          "Architecture diagrams reviewed and approved by technical stakeholders",
+          "Repository structure created with initial scaffolding",
+          "Local development environment runnable with docker-compose up",
+          "CI pipeline skeleton in place (linting, type checking)"
+        ],
+        "keyDecisions": [
+          "Database: Postgres selected for ACID compliance and audit trail support",
+          "ORM: Prisma vs. Drizzle (choose and document in ADR)",
+          "Job queue: BullMQ/Bee-Queue (Redis-backed) for background jobs",
+          "Monorepo tool: Turborepo or Nx (choose and document)"
+        ]
+      },
+      {
+        "phaseNumber": 2,
+        "phaseName": "Shopify Integration Layer",
+        "duration": "3 weeks",
+        "description": "Implement Shopify embedded app with OAuth, webhooks, billing, and basic admin UI.",
+        "deliverables": [
+          {
+            "name": "Shopify Remix Embedded App",
+            "features": [
+              "OAuth 2.0 flow with Shopify",
+              "Session storage in Postgres (encrypted tokens)",
+              "App Bridge for embedded admin UI",
+              "Basic navigation and layout"
+            ]
+          },
+          {
+            "name": "Webhook Handlers",
+            "webhooks": [
+              {
+                "topic": "products/create",
+                "handler": "Create product record in internal DB"
+              },
+              {
+                "topic": "products/update",
+                "handler": "Update product record idempotently"
+              },
+              {
+                "topic": "products/delete",
+                "handler": "Soft-delete product record"
+              },
+              {
+                "topic": "app/uninstalled",
+                "handler": "Mark tenant inactive, trigger data retention policy"
+              }
+            ],
+            "quality": [
+              "HMAC signature verification",
+              "Idempotent processing (handle duplicates)",
+              "Background job queuing for processing",
+              "Retry logic with exponential backoff"
+            ]
+          },
+          {
+            "name": "Reconciliation Sync Job",
+            "type": "Scheduled (nightly cron)",
+            "approach": "Cursor-based pagination through Shopify products, compare with internal DB, update drift",
+            "monitoring": "Log sync results, alert on >5% drift"
+          },
+          {
+            "name": "Billing Integration",
+            "plans": [
+              {
+                "name": "Free Tier",
+                "limits": "Up to 25 products with compliance tracking"
+              },
+              {
+                "name": "Professional",
+                "price": "$29/month",
+                "limits": "Up to 500 products, exports, public pages"
+              },
+              {
+                "name": "Enterprise",
+                "price": "$99/month",
+                "limits": "Unlimited products, priority support, advanced exports"
+              }
+            ],
+            "implementation": "Shopify Billing API with recurring charges"
+          },
+          {
+            "name": "Admin UI - Product List",
+            "features": [
+              "List products with compliance status badges (incomplete, complete, export-ready)",
+              "Search and filter by status, product name",
+              "Pagination",
+              "Click to view/edit compliance details"
+            ]
+          },
+          {
+            "name": "Shopify Rate Limit Handling",
+            "approach": "Monitor X-Shopify-Shop-Api-Call-Limit header, queue requests when approaching limit, exponential backoff on 429 errors"
+          }
+        ],
+        "testing": [
+          {
+            "type": "Unit Tests",
+            "coverage": "Webhook signature verification, idempotency logic, rate limit handling"
+          },
+          {
+            "type": "Integration Tests",
+            "coverage": "OAuth flow, webhook processing end-to-end with mocked Shopify API"
+          },
+          {
+            "type": "Smoke Test Script",
+            "flow": "Install app in dev store → trigger product create → verify sync → list products in admin UI"
+          }
+        ],
+        "acceptanceCriteria": [
+          "App installable on Shopify dev store via OAuth",
+          "Webhooks verified and processed correctly (tested with Shopify webhook simulator)",
+          "Reconciliation sync completes successfully for 1000+ product store",
+          "Billing flow tested (subscription create/update/cancel)",
+          "Admin UI shows product list with accurate status"
+        ],
+        "documentation": [
+          "README section: Local Shopify setup with dev store",
+          "README section: Webhook testing with ngrok/Shopify CLI",
+          "ADR: Why Shopify Remix template vs. custom Node.js app"
+        ]
+      },
+      {
+        "phaseNumber": 3,
+        "phaseName": "Data Model, API, and Audit Trail",
+        "duration": "3 weeks",
+        "description": "Implement canonical data model, REST API with validation, and append-only audit trail.",
+        "deliverables": [
+          {
+            "name": "Database Schema (Postgres)",
+            "tables": [
+              {
+                "name": "tenants",
+                "columns": [
+                  "id (PK)",
+                  "shop_domain (unique)",
+                  "access_token (encrypted)",
+                  "active",
+                  "created_at",
+                  "updated_at"
+                ]
+              },
+              {
+                "name": "products",
+                "columns": [
+                  "id (PK)",
+                  "tenant_id (FK)",
+                  "shopify_product_id",
+                  "shopify_variant_id",
+                  "title",
+                  "sku",
+                  "status",
+                  "created_at",
+                  "updated_at",
+                  "deleted_at (soft delete)"
+                ]
+              },
+              {
+                "name": "compliance_records",
+                "columns": [
+                  "id (PK)",
+                  "product_id (FK)",
+                  "materials (JSONB)",
+                  "country_of_manufacture",
+                  "supplier_reference",
+                  "certifications (JSONB)",
+                  "care_instructions",
+                  "recycled_content_percentage",
+                  "safety_warnings",
+                  "environmental_statement",
+                  "dimensions (JSONB)",
+                  "chemical_compliance (JSONB)",
+                  "version",
+                  "created_at",
+                  "updated_at"
+                ]
+              },
+              {
+                "name": "audit_logs",
+                "columns": [
+                  "id (PK)",
+                  "tenant_id (FK)",
+                  "product_id (FK)",
+                  "user_id",
+                  "action",
+                  "entity_type",
+                  "entity_id",
+                  "old_value (JSONB)",
+                  "new_value (JSONB)",
+                  "timestamp",
+                  "ip_address"
+                ],
+                "constraints": [
+                  "Append-only (no updates/deletes)",
+                  "Indexed on tenant_id, product_id, timestamp"
+                ]
+              },
+              {
+                "name": "users",
+                "columns": [
+                  "id (PK)",
+                  "tenant_id (FK)",
+                  "shopify_user_id",
+                  "email",
+                  "role (admin/editor/viewer)",
+                  "created_at",
+                  "updated_at"
+                ]
+              },
+              {
+                "name": "exports",
+                "columns": [
+                  "id (PK)",
+                  "tenant_id (FK)",
+                  "product_id (FK, nullable for bulk)",
+                  "format (JSON/PDF)",
+                  "status (pending/processing/completed/failed)",
+                  "file_url",
+                  "created_at",
+                  "completed_at"
+                ]
+              }
+            ],
+            "migrations": "Versioned migrations with up/down scripts (Prisma Migrate or Drizzle Kit)"
+          },
+          {
+            "name": "REST API with OpenAPI Spec",
+            "endpoints": [
+              {
+                "method": "GET",
+                "path": "/api/products",
+                "description": "List products with compliance status",
+                "auth": "Required (tenant-scoped)",
+                "queryParams": [
+                  "status",
+                  "search",
+                  "page",
+                  "limit"
+                ]
+              },
+              {
+                "method": "GET",
+                "path": "/api/products/:id",
+                "description": "Get single product with compliance record",
+                "auth": "Required"
+              },
+              {
+                "method": "GET",
+                "path": "/api/products/:id/compliance",
+                "description": "Get compliance record for product",
+                "auth": "Required"
+              },
+              {
+                "method": "PUT",
+                "path": "/api/products/:id/compliance",
+                "description": "Update compliance record (creates audit log entry)",
+                "auth": "Required (editor or admin role)",
+                "validation": "Strict schema validation (materials sum to 100%, required fields, etc.)"
+              },
+              {
+                "method": "GET",
+                "path": "/api/products/:id/audit",
+                "description": "Get audit history for product",
+                "auth": "Required"
+              },
+              {
+                "method": "POST",
+                "path": "/api/exports",
+                "description": "Request export generation (async)",
+                "auth": "Required",
+                "body": {
+                  "productIds": [
+                    "array"
+                  ],
+                  "format": "JSON|PDF"
+                }
+              },
+              {
+                "method": "GET",
+                "path": "/api/exports/:id",
+                "description": "Get export status and download URL",
+                "auth": "Required"
+              }
+            ],
+            "openApiSpec": "Committed to repo, generated docs available at /api/docs"
+          },
+          {
+            "name": "Validation Layer",
+            "approach": "Centralized validation schemas using Zod or Joi",
+            "validations": [
+              "Material percentages sum to 100%",
+              "Country codes match ISO 3166-1",
+              "Recycled content percentage 0-100",
+              "Required fields present for 'export-ready' status",
+              "String length limits enforced",
+              "Date formats validated"
+            ]
+          },
+          {
+            "name": "Authorization Middleware",
+            "tenantIsolation": "All queries scoped by tenant_id derived from session",
+            "roleChecking": "Middleware enforces role requirements (admin/editor/viewer)",
+            "testing": "Integration tests verify no cross-tenant data leakage"
+          },
+          {
+            "name": "Audit Trail Implementation",
+            "approach": "Database trigger or application-level audit log creation on every compliance record update",
+            "atomicity": "Audit log write wrapped in same transaction as data update",
+            "immutability": "Database constraints prevent UPDATE/DELETE on audit_logs table"
+          }
+        ],
+        "testing": [
+          {
+            "type": "Unit Tests",
+            "coverage": "Validation logic, audit log creation, tenant isolation helpers"
+          },
+          {
+            "type": "Integration Tests",
+            "coverage": "API endpoints with real Postgres (test container), transaction rollback testing"
+          },
+          {
+            "type": "API Contract Tests",
+            "coverage": "OpenAPI spec matches actual API responses"
+          }
+        ],
+        "acceptanceCriteria": [
+          "Database schema created with migrations runnable up and down",
+          "All API endpoints implemented and documented in OpenAPI spec",
+          "Validation prevents invalid data from being saved",
+          "Audit log created for every compliance update",
+          "Tenant isolation verified (no cross-tenant queries possible)",
+          "API contract tests passing"
+        ],
+        "documentation": [
+          "Data model documentation with ERD diagram",
+          "API usage guide with example requests/responses",
+          "Tenant isolation approach document",
+          "ADR: Product-level vs. variant-level compliance records"
+        ]
+      },
+      {
+        "phaseNumber": 4,
+        "phaseName": "Compliance Workflow UI",
+        "duration": "3 weeks",
+        "description": "Build high-quality admin UI for compliance data management with search, filtering, editing, and audit views.",
+        "deliverables": [
+          {
+            "name": "Product List View",
+            "features": [
+              "Searchable product list (by title, SKU)",
+              "Filter by compliance status (incomplete, complete, export-ready)",
+              "Sortable columns (name, status, last updated)",
+              "Status badges with color coding",
+              "Tooltip or expandable details showing missing fields",
+              "Pagination with configurable page size",
+              "Bulk actions (select multiple products for export)"
+            ],
+            "techStack": "React with Polaris (Shopify's design system)"
+          },
+          {
+            "name": "Compliance Editor (Product Detail)",
+            "sections": [
+              {
+                "section": "Material Composition",
+                "features": [
+                  "Add/remove materials",
+                  "Percentage input with real-time validation",
+                  "Total percentage indicator (must equal 100%)"
+                ]
+              },
+              {
+                "section": "Basic Info",
+                "fields": [
+                  "Country of Manufacture (dropdown or autocomplete)",
+                  "Supplier Reference (text input)"
+                ]
+              },
+              {
+                "section": "Certifications",
+                "features": [
+                  "Add multiple certifications",
+                  "Fields: type, body, number, dates",
+                  "Optional document attachment (upload or link)"
+                ]
+              },
+              {
+                "section": "Additional Compliance",
+                "fields": [
+                  "Care instructions",
+                  "Recycled content %",
+                  "Safety warnings",
+                  "Environmental statement",
+                  "Dimensions",
+                  "Chemical compliance"
+                ]
+              }
+            ],
+            "validation": [
+              "Inline validation with clear error messages",
+              "Required field indicators",
+              "Field-level help text and tooltips"
+            ],
+            "ux": [
+              "Auto-save draft mode or explicit Save button with confirmation",
+              "Dirty state indicator (unsaved changes warning)",
+              "Success/error toast notifications",
+              "Loading states for async operations"
+            ]
+          },
+          {
+            "name": "Compliance Checklist Widget",
+            "features": [
+              "Visual progress indicator (e.g., 6/10 fields complete)",
+              "Expandable checklist showing required vs. optional fields",
+              "Missing fields highlighted",
+              "'Export-ready' criteria clearly explained",
+              "Configurable export-ready thresholds (admin setting)"
+            ]
+          },
+          {
+            "name": "Audit History View",
+            "features": [
+              "Chronological list of changes per product",
+              "Each entry shows: timestamp, user, action, field changed, old → new value",
+              "Filter by date range, user, field",
+              "Export audit log to CSV",
+              "Read-only view (no edit/delete)"
+            ]
+          },
+          {
+            "name": "Attachment Handling",
+            "approach": "Upload to S3-compatible storage with signed URLs, store metadata in DB",
+            "constraints": "Max file size 10MB, allowed types: PDF, JPG, PNG"
+          }
+        ],
+        "testing": [
+          {
+            "type": "Component Tests (Vitest + Testing Library)",
+            "coverage": "Material editor, validation logic, checklist widget"
+          },
+          {
+            "type": "E2E Tests (Playwright)",
+            "flows": [
+              "Install app (simulated) → open admin → view product list",
+              "Edit compliance data → save → verify status update",
+              "Add certification with attachment → verify saved",
+              "View audit history → verify change logged"
+            ]
+          }
+        ],
+        "acceptanceCriteria": [
+          "Product list view loads <2 seconds with 500 products",
+          "Compliance editor saves data correctly with validation",
+          "Status updates immediately after save",
+          "Audit view shows complete history",
+          "E2E tests passing for core workflows"
+        ],
+        "documentation": [
+          "UI component documentation (Storybook optional)",
+          "User flows with screenshots",
+          "ADR: Auto-save vs. explicit Save button"
+        ]
+      },
+      {
+        "phaseNumber": 5,
+        "phaseName": "Exports and Public Pages",
+        "duration": "2-3 weeks",
+        "description": "Implement JSON/PDF exports, QR code generation, and optional public product compliance pages.",
+        "deliverables": [
+          {
+            "name": "Export Job System",
+            "implementation": "Background job queue (BullMQ) for async export generation",
+            "flow": [
+              "User requests export via API or UI",
+              "Export record created with status 'pending'",
+              "Job queued and processed by worker",
+              "Export file generated and uploaded to object storage",
+              "Export record updated with 'completed' status and signed URL",
+              "User notified (in-app or email)"
+            ]
+          },
+          {
+            "name": "JSON Export",
+            "format": "Machine-readable JSON with complete compliance data",
+            "structure": {
+              "metadata": {
+                "exportId": "uuid",
+                "generatedAt": "timestamp",
+                "version": "1.0",
+                "product": "Shopify product details"
+              },
+              "complianceData": {
+                "materials": [],
+                "countryOfManufacture": "",
+                "certifications": []
+              },
+              "auditMetadata": {
+                "lastUpdated": "timestamp",
+                "updatedBy": "user"
+              }
+            }
+          },
+          {
+            "name": "PDF Export",
+            "implementation": "PDF generation library (Puppeteer, PDFKit, or similar)",
+            "template": "Branded PDF with merchant logo (optional), product image, compliance fields, audit metadata",
+            "snapshotTesting": "Visual regression tests for PDF layout"
+          },
+          {
+            "name": "QR Code Generation",
+            "implementation": "Generate QR code linking to public compliance page URL",
+            "url": "https://passport.yourdomain.com/p/{stable_product_id}",
+            "downloadable": "Merchant can download QR code as PNG/SVG"
+          },
+          {
+            "name": "Public Compliance Pages (Optional v1)",
+            "features": [
+              "Unique, stable URL per product",
+              "No authentication required (public)",
+              "Merchant configurable: choose which fields to display publicly",
+              "Default: materials, country, certifications (no supplier reference)",
+              "Responsive design for mobile scanning",
+              "Footer: 'Last Updated' timestamp, version, merchant contact"
+            ],
+            "security": [
+              "Rate limiting to prevent scraping",
+              "No PII exposed",
+              "Merchant can disable public page per product",
+              "Public pages indexed by search engines only if merchant opts in"
+            ]
+          },
+          {
+            "name": "Object Storage Integration",
+            "service": "S3-compatible (AWS S3, Backblaze B2, Cloudflare R2)",
+            "features": [
+              "Upload exports with unique keys",
+              "Generate signed URLs with 24-hour expiry",
+              "Lifecycle policy to delete exports after 30 days"
+            ]
+          },
+          {
+            "name": "Versioning and Stable Identifiers",
+            "approach": "Compliance records include version number, incremented on each update. Exports reference version. Public pages show version and 'as of' date."
+          }
+        ],
+        "testing": [
+          {
+            "type": "Unit Tests",
+            "coverage": "Export job logic, PDF generation, QR code generation"
+          },
+          {
+            "type": "Integration Tests",
+            "coverage": "Export end-to-end (request → job → storage → signed URL)"
+          },
+          {
+            "type": "Snapshot Tests",
+            "coverage": "PDF templates to detect layout regressions"
+          }
+        ],
+        "acceptanceCriteria": [
+          "JSON export generated <30 seconds for single product",
+          "PDF export rendered correctly with all compliance fields",
+          "QR code scannable and links to correct public page",
+          "Public page loads <2 seconds, displays only merchant-approved fields",
+          "Exports stored securely with signed URLs"
+        ],
+        "documentation": [
+          "Exports and public pages feature guide",
+          "Security review notes for public pages",
+          "ADR: PDF generation library selection"
+        ]
+      },
+      {
+        "phaseNumber": 6,
+        "phaseName": "Production Hardening and Launch Readiness",
+        "duration": "2-3 weeks",
+        "description": "CI/CD pipeline, security hardening, observability, comprehensive documentation, and operational runbooks.",
+        "deliverables": [
+          {
+            "name": "CI/CD Pipeline (GitHub Actions)",
+            "stages": [
+              {
+                "stage": "Lint and Type Check",
+                "tools": [
+                  "ESLint",
+                  "TypeScript"
+                ]
+              },
+              {
+                "stage": "Unit Tests",
+                "coverage": "Run all unit tests, enforce ≥80% coverage for business logic"
+              },
+              {
+                "stage": "Integration Tests",
+                "setup": "Postgres service container, Redis container",
+                "tests": "API integration tests, database tests"
+              },
+              {
+                "stage": "E2E Tests",
+                "tool": "Playwright",
+                "tests": "Install flow, sync flow, edit flow, export flow"
+              },
+              {
+                "stage": "Security Scanning",
+                "tools": [
+                  "npm audit / yarn audit for dependency vulnerabilities",
+                  "SAST (Semgrep, SonarCloud, or similar)",
+                  "SBOM generation (Syft or similar)"
+                ]
+              },
+              {
+                "stage": "Build Docker Images",
+                "images": [
+                  "shopify-admin",
+                  "api",
+                  "worker"
+                ]
+              },
+              {
+                "stage": "Push to Registry",
+                "registry": "Docker Hub, GitHub Container Registry, or private registry"
+              },
+              {
+                "stage": "Deploy to Staging",
+                "trigger": "Automatic on merge to main",
+                "deployment": "Deploy to staging environment, run smoke tests"
+              },
+              {
+                "stage": "Deploy to Production",
+                "trigger": "Manual approval",
+                "deployment": "Blue-green or rolling deployment, monitor metrics"
+              }
+            ]
+          },
+          {
+            "name": "Security Hardening",
+            "measures": [
+              {
+                "area": "Secrets Management",
+                "approach": "Environment variables for dev/staging, secrets vault (Doppler, AWS Secrets Manager, or similar) for production"
+              },
+              {
+                "area": "Webhook Security",
+                "approach": "HMAC verification on all webhooks, reject unsigned requests"
+              },
+              {
+                "area": "Content Security Policy (CSP)",
+                "approach": "Strict CSP headers for embedded app to prevent XSS"
+              },
+              {
+                "area": "Rate Limiting",
+                "approach": "Per-tenant rate limits (e.g., 100 req/min), global rate limits (e.g., 10k req/min)"
+              },
+              {
+                "area": "Audit Log Immutability",
+                "approach": "Database constraints prevent updates/deletes on audit_logs"
+              },
+              {
+                "area": "Data Retention Policy",
+                "approach": "Configurable retention (default 90 days post-uninstall), GDPR-compliant deletion"
+              },
+              {
+                "area": "Input Sanitization",
+                "approach": "All inputs validated and sanitized, parameterized queries to prevent SQL injection"
+              }
+            ]
+          },
+          {
+            "name": "Observability",
+            "logging": {
+              "format": "Structured JSON logs",
+              "fields": [
+                "timestamp",
+                "level",
+                "message",
+                "correlationId",
+                "tenantId",
+                "userId",
+                "context"
+              ],
+              "aggregation": "Centralized logging (Datadog, Logtail, or ELK stack)"
+            },
+            "metrics": {
+              "tool": "Prometheus, Datadog, or New Relic",
+              "keyMetrics": [
+                "API request latency (p50, p95, p99)",
+                "Webhook processing latency",
+                "Webhook failure rate",
+                "Export job success/failure rate",
+                "Database query latency",
+                "Job queue depth",
+                "Active tenant count"
+              ]
+            },
+            "tracing": {
+              "tool": "OpenTelemetry (optional for v1)",
+              "coverage": "Distributed tracing for API requests through job processing"
+            },
+            "healthChecks": {
+              "endpoints": [
+                "/health (basic liveness check)",
+                "/readiness (checks DB, Redis, external dependencies)"
+              ]
+            },
+            "alerts": {
+              "criticalAlerts": [
+                "Webhook failure rate >5%",
+                "Export job failure rate >10%",
+                "API error rate >1%",
+                "Database connection failures",
+                "Sync job hasn't run in 25 hours"
+              ],
+              "channels": "PagerDuty, Slack, email"
+            }
+          },
+          {
+            "name": "Documentation",
+            "docs": [
+              {
+                "name": "README.md",
+                "sections": [
+                  "Project overview",
+                  "Local development setup",
+                  "Environment variables",
+                  "Running tests",
+                  "Deployment"
+                ]
+              },
+              {
+                "name": "Architecture Documentation",
+                "includes": [
+                  "System architecture diagram",
+                  "Data flow diagrams",
+                  "ADRs (Architecture Decision Records)"
+                ]
+              },
+              {
+                "name": "API Documentation",
+                "format": "OpenAPI spec with Swagger UI or Redoc",
+                "hosting": "Hosted at /api/docs endpoint"
+              },
+              {
+                "name": "Data Model Documentation",
+                "includes": [
+                  "ERD (Entity-Relationship Diagram)",
+                  "Table schemas",
+                  "Index strategy"
+                ]
+              },
+              {
+                "name": "Operations Runbook",
+                "sections": [
+                  "How to diagnose webhook delivery failures",
+                  "How to investigate sync drift",
+                  "How to handle failed export jobs",
+                  "How to restore from backup",
+                  "How to handle GDPR deletion requests",
+                  "Common errors and solutions"
+                ]
+              },
+              {
+                "name": "Security Posture Document",
+                "sections": [
+                  "Authentication and authorization",
+                  "Data encryption",
+                  "Secrets management",
+                  "Security scanning",
+                  "Incident response plan"
+                ]
+              },
+              {
+                "name": "Release Process Document",
+                "sections": [
+                  "Version numbering (SemVer)",
+                  "Branching strategy (GitFlow or trunk-based)",
+                  "Deployment steps",
+                  "Rollback procedure"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Backup and Disaster Recovery",
+            "database": {
+              "backups": "Automated daily backups with 30-day retention",
+              "pointInTimeRecovery": "Enabled (Postgres WAL archiving or managed service PITR)",
+              "restorationTesting": "Quarterly restore tests documented"
+            },
+            "objectStorage": {
+              "replication": "Cross-region replication or versioning enabled"
+            },
+            "rtoRpo": {
+              "RTO": "4 hours (Recovery Time Objective)",
+              "RPO": "1 hour (Recovery Point Objective)"
+            }
+          },
+          {
+            "name": "Performance Testing",
+            "loadTests": [
+              "Simulate 100 concurrent webhook deliveries",
+              "Test reconciliation sync with 10,000 product catalog",
+              "Load test API endpoints (1000 req/min sustained)"
+            ],
+            "tools": "k6, Artillery, or JMeter"
+          }
+        ],
+        "testing": [
+          {
+            "type": "CI Pipeline Validation",
+            "coverage": "All pipeline stages run successfully on feature branch"
+          },
+          {
+            "type": "Security Scanning",
+            "coverage": "No high/critical vulnerabilities in dependencies or code"
+          },
+          {
+            "type": "Load Testing",
+            "coverage": "System handles expected load without degradation"
+          }
+        ],
+        "acceptanceCriteria": [
+          "CI/CD pipeline fully functional with automated tests",
+          "Security scanning integrated and passing",
+          "Observability stack deployed (logging, metrics, alerts)",
+          "All documentation complete and reviewed",
+          "Backup and restore tested successfully",
+          "Operations runbook validated with simulated incidents",
+          "Load tests demonstrate system meets SLOs"
+        ],
+        "documentation": [
+          "Complete documentation package committed to repo",
+          "Runbook tested with on-call engineer role-play"
+        ]
+      }
+    ],
+    "userFlows": [
+      {
+        "flowName": "Initial Installation and Setup",
+        "steps": [
+          "Merchant discovers app in Shopify App Store",
+          "Clicks 'Install' and authorizes required permissions (read_products, write_products, read_files)",
+          "OAuth flow redirects to embedded app",
+          "App creates tenant record and initiates initial product sync",
+          "Merchant sees onboarding checklist and product sync progress",
+          "Initial sync completes, merchant sees product list with compliance status"
+        ],
+        "successCriteria": "Merchant can see their products with 'incomplete' compliance status within 2 minutes of installation"
+      },
+      {
+        "flowName": "Product Sync (Automated)",
+        "triggerTypes": [
+          "webhook",
+          "scheduled"
+        ],
+        "webhookFlow": [
+          "Shopify fires products/create, products/update, or products/delete webhook",
+          "App verifies HMAC signature",
+          "Webhook handler queues background job",
+          "Job processes idempotently: creates/updates/soft-deletes product record",
+          "Compliance status recalculated if product data affects it",
+          "UI updates in real-time (if merchant is viewing)"
+        ],
+        "scheduledFlow": [
+          "Nightly cron job triggers full reconciliation sync",
+          "Fetches all products from Shopify with cursor-based pagination",
+          "Compares against internal records, identifies drift",
+          "Updates internal records to match Shopify source of truth",
+          "Logs any discrepancies for monitoring"
+        ],
+        "successCriteria": "Product changes in Shopify reflected in compliance app within 30 seconds (webhook) or next scheduled sync"
+      },
+      {
+        "flowName": "Compliance Data Editing",
+        "steps": [
+          "Merchant navigates to product list, filters by 'incomplete' status",
+          "Selects a product to edit compliance data",
+          "Compliance editor loads with current data and validation rules",
+          "Merchant fills in required fields (materials, country, supplier)",
+          "Adds optional certifications with document attachments",
+          "System validates inputs (e.g., material percentages sum to 100%)",
+          "Merchant saves changes",
+          "Audit log entry created with user, timestamp, and changes",
+          "Compliance status recalculated (incomplete → complete → export-ready)",
+          "Success message displayed"
+        ],
+        "successCriteria": "Changes saved, audit trail created, status updated immediately with clear validation feedback"
+      },
+      {
+        "flowName": "Compliance Checklist Review",
+        "steps": [
+          "Merchant opens product compliance editor",
+          "Checklist widget shows required vs. optional fields",
+          "Visual indicators show completion status per field group",
+          "Merchant clicks 'What's missing?' to see detailed list",
+          "System highlights incomplete required fields",
+          "Merchant completes missing fields",
+          "Checklist updates in real-time",
+          "Status badge changes from 'incomplete' to 'complete' or 'export-ready'"
+        ],
+        "successCriteria": "Merchant understands exactly what's needed to achieve 'export-ready' status"
+      },
+      {
+        "flowName": "Export Generation (JSON and PDF)",
+        "steps": [
+          "Merchant navigates to product list or single product view",
+          "Clicks 'Export' button, selects format (JSON or PDF)",
+          "Export request queued as background job",
+          "Job generates export file with compliance data, audit metadata, versioning",
+          "File uploaded to object storage (S3-compatible)",
+          "Merchant receives notification (in-app or email)",
+          "Merchant downloads via signed URL (expires in 24 hours)",
+          "Export includes: product details, all compliance fields, audit metadata, timestamp, version"
+        ],
+        "successCriteria": "Export generated within 60 seconds for single product, available for download with clear audit trail"
+      },
+      {
+        "flowName": "Public Product Compliance Page (Optional)",
+        "prerequisite": "Merchant enables public pages in settings",
+        "steps": [
+          "Merchant enables public page for specific product",
+          "System generates unique, stable URL and QR code",
+          "Merchant can configure which fields are public vs. private",
+          "QR code can be printed on product label or packaging",
+          "Customer scans QR code",
+          "Public page loads with compliance information (no auth required)",
+          "Page displays: materials, country of manufacture, certifications, care instructions",
+          "Page includes 'Last Updated' timestamp and version info"
+        ],
+        "successCriteria": "Public page loads in <2 seconds, displays only merchant-approved fields, QR code scannable"
+      },
+      {
+        "flowName": "Audit History Review",
+        "steps": [
+          "Merchant or compliance officer navigates to product detail",
+          "Clicks 'Audit History' tab",
+          "System displays chronological list of all changes",
+          "Each entry shows: timestamp, user, field changed, old value, new value",
+          "Merchant can filter by date range, user, or field",
+          "Merchant can export audit log for regulatory reporting"
+        ],
+        "successCriteria": "Complete, immutable audit trail accessible and exportable"
+      },
+      {
+        "flowName": "App Uninstall",
+        "steps": [
+          "Merchant uninstalls app from Shopify admin",
+          "Shopify fires app/uninstalled webhook",
+          "App receives webhook and marks tenant as inactive",
+          "Data retention policy kicks in (configurable: retain 90 days or delete immediately)",
+          "Scheduled job handles final cleanup based on policy",
+          "Merchant can reinstall and restore data if within retention window"
+        ],
+        "successCriteria": "Graceful uninstall, data handled per retention policy, GDPR-compliant deletion if requested"
+      }
+    ],
+    "deploymentChecklist": {
+      "localDevelopment": {
+        "steps": [
+          {
+            "step": 1,
+            "task": "Create Shopify Partner account",
+            "url": "https://partners.shopify.com"
+          },
+          {
+            "step": 2,
+            "task": "Create development app in Partner Dashboard",
+            "type": "Custom app for initial development"
+          },
+          {
+            "step": 3,
+            "task": "Install Shopify CLI",
+            "command": "npm install -g @shopify/cli"
+          },
+          {
+            "step": 4,
+            "task": "Clone repository and install dependencies",
+            "commands": [
+              "git clone <repo>",
+              "npm install"
+            ]
+          },
+          {
+            "step": 5,
+            "task": "Set up environment variables",
+            "file": ".env (copy from .env.example)",
+            "requiredVars": [
+              "SHOPIFY_API_KEY",
+              "SHOPIFY_API_SECRET",
+              "SCOPES=read_products,write_products,read_files",
+              "APP_URL (tunnel URL from Shopify CLI)",
+              "DATABASE_URL",
+              "REDIS_URL",
+              "S3_BUCKET",
+              "S3_ACCESS_KEY",
+              "S3_SECRET_KEY"
+            ]
+          },
+          {
+            "step": 6,
+            "task": "Start local services",
+            "command": "docker-compose up -d (Postgres, Redis)"
+          },
+          {
+            "step": 7,
+            "task": "Run database migrations",
+            "command": "npm run db:migrate"
+          },
+          {
+            "step": 8,
+            "task": "Start development server",
+            "command": "shopify app dev (creates tunnel and starts app)"
+          },
+          {
+            "step": 9,
+            "task": "Configure redirect URLs in Partner Dashboard",
+            "urls": "Match dev tunnel callbacks (e.g., https://<tunnel>/auth/callback)"
+          },
+          {
+            "step": 10,
+            "task": "Install app on dev store and test",
+            "flow": "Use install URL from Shopify CLI → authorize → verify sync"
+          },
+          {
+            "step": 11,
+            "task": "Test webhooks locally",
+            "approach": "Use Shopify webhook simulator in Partner Dashboard or trigger events in dev store"
+          }
+        ]
+      },
+      "productionDeployment": {
+        "infrastructure": [
+          {
+            "component": "Application Hosting",
+            "options": [
+              "Fly.io",
+              "Render",
+              "Railway",
+              "AWS ECS",
+              "Google Cloud Run"
+            ],
+            "requirements": [
+              "TLS/SSL",
+              "Auto-scaling",
+              "Health checks"
+            ]
+          },
+          {
+            "component": "Database",
+            "service": "Managed Postgres (Supabase, Fly Postgres, Neon, Render, AWS RDS)",
+            "requirements": [
+              "Automated backups",
+              "PITR",
+              "Encryption at rest"
+            ]
+          },
+          {
+            "component": "Object Storage",
+            "service": "S3-compatible (Backblaze B2, Cloudflare R2, AWS S3)",
+            "requirements": [
+              "Signed URLs",
+              "Lifecycle policies",
+              "CORS configured"
+            ]
+          },
+          {
+            "component": "Redis",
+            "service": "Managed Redis (Upstash, Fly Redis, AWS ElastiCache)",
+            "purpose": "Job queue, rate limiting, caching"
+          },
+          {
+            "component": "Logging/Monitoring",
+            "service": "Datadog, New Relic, Logtail, or self-hosted (Grafana + Loki)",
+            "requirements": [
+              "Log aggregation",
+              "Metrics dashboards",
+              "Alerting"
+            ]
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "task": "Provision production infrastructure",
+            "details": "Set up hosting, database, Redis, object storage as per architecture"
+          },
+          {
+            "step": 2,
+            "task": "Configure production domains",
+            "domains": [
+              "APP_URL=https://app.yourdomain.com",
+              "PUBLIC_PAGES_URL=https://passport.yourdomain.com (optional)"
+            ]
+          },
+          {
+            "step": 3,
+            "task": "Set production environment variables",
+            "approach": "Use secrets manager or CI/CD secrets, never commit to repo"
+          },
+          {
+            "step": 4,
+            "task": "Deploy application via CI/CD",
+            "flow": "Push to main → CI runs tests → deploy to staging → manual promote to production"
+          },
+          {
+            "step": 5,
+            "task": "Run database migrations in production",
+            "approach": "Automated via CI/CD or manual with zero-downtime strategy"
+          },
+          {
+            "step": 6,
+            "task": "Update Shopify Partner Dashboard",
+            "updates": [
+              "App URL to production domain",
+              "Redirect URLs",
+              "Webhook endpoints (if manually configured)"
+            ]
+          },
+          {
+            "step": 7,
+            "task": "Configure monitoring and alerts",
+            "details": "Set up dashboards, alerts for critical metrics"
+          },
+          {
+            "step": 8,
+            "task": "Test production install flow",
+            "approach": "Install app on test Shopify store, verify full workflow"
+          },
+          {
+            "step": 9,
+            "task": "Set up automated backups",
+            "schedule": "Daily database backups, 30-day retention"
+          },
+          {
+            "step": 10,
+            "task": "Document rollback procedure",
+            "details": "How to revert deployment if issues arise"
+          }
+        ]
+      },
+      "shopifyAppStoreSubmission": {
+        "prerequisites": [
+          "Switch app from Custom to Public in Partner Dashboard",
+          "Complete app development and testing",
+          "Ensure app meets Shopify review guidelines"
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "task": "Prepare listing assets",
+            "assets": [
+              "App name and tagline",
+              "Detailed description (benefits, features, use cases)",
+              "Screenshots (5-7 high-quality images)",
+              "Demo video (30-90 seconds)",
+              "App icon (512x512px)"
+            ]
+          },
+          {
+            "step": 2,
+            "task": "Configure pricing plans in Partner Dashboard",
+            "match": "Must match Shopify Billing API implementation"
+          },
+          {
+            "step": 3,
+            "task": "Prepare required policies",
+            "policies": [
+              "Privacy policy (how user data is collected, used, stored)",
+              "Terms of service",
+              "Data deletion/retention statement (GDPR compliance)",
+              "Support email and contact info"
+            ]
+          },
+          {
+            "step": 4,
+            "task": "Ensure minimal required scopes",
+            "approach": "Request only scopes absolutely necessary (avoid over-permissioning)"
+          },
+          {
+            "step": 5,
+            "task": "Implement and test app/uninstalled webhook",
+            "requirement": "App must handle uninstall gracefully and clean up data per retention policy"
+          },
+          {
+            "step": 6,
+            "task": "Create clear onboarding experience",
+            "features": [
+              "Welcome message",
+              "Quick start guide",
+              "Value proposition",
+              "Sample data or tutorial"
+            ]
+          },
+          {
+            "step": 7,
+            "task": "Test install/uninstall flows thoroughly",
+            "coverage": "Install, use core features, uninstall, reinstall, verify data handling"
+          },
+          {
+            "step": 8,
+            "task": "Submit app for review in Partner Dashboard",
+            "details": "Complete submission form, upload assets, provide test store credentials"
+          },
+          {
+            "step": 9,
+            "task": "Respond to Shopify review feedback",
+            "expectation": "Be prepared to iterate on UX, scopes, or policies based on review team requests"
+          },
+          {
+            "step": 10,
+            "task": "Launch and monitor",
+            "postLaunch": "Monitor install metrics, user feedback, error rates, support requests"
+          }
+        ],
+        "commonRejectionReasons": [
+          "Requesting unnecessary scopes",
+          "Poor onboarding UX (unclear value proposition)",
+          "Broken install/uninstall flows",
+          "Missing or inadequate privacy policy",
+          "App doesn't provide clear value",
+          "Performance issues or errors during review"
+        ],
+        "tips": [
+          "Allocate 2-4 weeks buffer for review iterations",
+          "Test app extensively before submission",
+          "Provide detailed test instructions to reviewers",
+          "Monitor Shopify Partner Dashboard for review updates"
+        ]
+      }
+    }
+  }
+}
