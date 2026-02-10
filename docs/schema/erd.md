@@ -38,9 +38,8 @@ erDiagram
         text handle
         text vendor
         text product_type
-        text status "active | draft | archived"
-        text compliance_status "pending | in_progress | complete | exported"
         text shopify_status "active | draft | archived"
+        text compliance_status "pending | in_progress | complete | exported"
         timestamptz shopify_updated_at
         timestamptz synced_at
         boolean is_deleted "soft delete"
