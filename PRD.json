@@ -777,7 +777,7 @@
       "phase": 0,
       "name": "Risk Register Documentation",
       "description": "Document all project risks",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F000"
       ],

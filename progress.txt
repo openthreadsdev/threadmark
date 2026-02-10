@@ -49,3 +49,12 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Covers multi-tenancy (tenant_id on all tables), RBAC (user roles), audit trail (append-only), soft delete, export tracking
 - Updated F003 status to "passes" in PRD.json
 - Next task: F004 - Risk Register Documentation
+
+[2026-02-10] F004 - Risk Register Documentation (PASSES)
+- Created docs/risks.md with all 10 risks (R001-R010) from PRD riskRegister
+- Includes summary risk matrix table with ID, category, likelihood, impact, rating, and owner
+- Each risk has detailed description and full mitigation list
+- Categories: Regulatory, Data Integrity, Technical, Security/Privacy, Business, Operations, Compliance
+- 4 High-rated risks (R001, R003, R008, R009), 5 Medium, 1 Low
+- Updated F004 status to "passes" in PRD.json
+- Next task: F005 - User Persona Validation
