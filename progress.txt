@@ -71,3 +71,11 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Included validation checklist with items to confirm with target merchants during beta
 - Updated F005 status to "passes" in PRD.json
 - Next task: F006 - Scope Boundary Document
+
+[2026-02-10] F006 - Scope Boundary Document (PASSES)
+- Created docs/scope.md with in-scope features (11 items), exclusions (13 items), and boundary notes
+- Added rationale column to exclusions table
+- Included future considerations section (DPP, EPR, carbon footprint, etc.)
+- Added stakeholder sign-off tracking table
+- Updated F006 status to "passes" in PRD.json
+- Next task: F007 - Non-Functional Requirements Checklist

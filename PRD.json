@@ -837,7 +837,7 @@
       "phase": 0,
       "name": "Scope Boundary Document",
       "description": "Create explicit scope boundary doc",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F000"
       ],
