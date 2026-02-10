@@ -58,3 +58,16 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - 4 High-rated risks (R001, R003, R008, R009), 5 Medium, 1 Low
 - Updated F004 status to "passes" in PRD.json
 - Next task: F005 - User Persona Validation
+
+[2026-02-10] ERD Review
+- Fixed redundant `status` column on products table (duplicated `shopify_status` with same enum values)
+- Products now have: `shopify_status` (mirrors Shopify), `compliance_status` (internal tracking), `is_deleted` (soft delete)
+
+[2026-02-10] F005 - User Persona Validation (PASSES)
+- Created docs/personas.md with both personas from PRD
+- Primary: EU-Facing Shopify Merchant (5-200 SKUs, low-medium tech skill)
+- Secondary: Compliance Officer / Operations Manager (50-200 SKUs, high regulatory knowledge)
+- Added success metrics measurement approach, design implications per persona
+- Included validation checklist with items to confirm with target merchants during beta
+- Updated F005 status to "passes" in PRD.json
+- Next task: F006 - Scope Boundary Document

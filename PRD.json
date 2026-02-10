@@ -807,7 +807,7 @@
       "phase": 0,
       "name": "User Persona Validation",
       "description": "Validate personas with target merchants",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F000"
       ],
