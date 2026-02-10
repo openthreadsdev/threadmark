@@ -40,3 +40,12 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Validated config with `docker compose config`
 - Updated F002 status to "passes" in PRD.json
 - Next task: F003 - Entity Relationship Diagram
+
+[2026-02-10] F003 - Entity Relationship Diagram (PASSES)
+- Created docs/schema/erd.md with full Mermaid ERD
+- 6 tables designed: tenants, products, compliance_records, audit_logs, users, exports
+- All 10 compliance attributes mapped to compliance_records columns (JSONB for structured/list types)
+- Documented relationships, table descriptions, key indexes, and constraints
+- Covers multi-tenancy (tenant_id on all tables), RBAC (user roles), audit trail (append-only), soft delete, export tracking
+- Updated F003 status to "passes" in PRD.json
+- Next task: F004 - Risk Register Documentation

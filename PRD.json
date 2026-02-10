@@ -747,7 +747,7 @@
       "phase": 0,
       "name": "Entity Relationship Diagram",
       "description": "Design database schema with ERD",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F000"
       ],
