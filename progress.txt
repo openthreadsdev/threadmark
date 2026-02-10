@@ -24,3 +24,10 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Created .gitignore with entries for: node_modules, build outputs, env files, IDE files, OS files, logs, coverage, Turbo cache, Prisma local DBs, Docker overrides, and temp files
 - Updated F000 status to "passes" in PRD.json
 - Next task: F001 - Environment Variable Template
+
+[2026-02-10] F001 - Environment Variable Template (PASSES)
+- Created .env.example with all required variables from PRD environmentSetup
+- Sections: App (NODE_ENV, APP_URL, PORT, LOG_LEVEL), Shopify (API_KEY, API_SECRET, SCOPES), Database (DATABASE_URL), Redis (REDIS_URL), Session (SESSION_SECRET), Object Storage (S3_BUCKET, S3_ACCESS_KEY, S3_SECRET_KEY, S3_REGION, S3_ENDPOINT)
+- Added inline comments documenting each section
+- Updated F001 status to "passes" in PRD.json
+- Next task: F002 - Docker Compose Configuration
