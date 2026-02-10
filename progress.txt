@@ -31,3 +31,12 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Added inline comments documenting each section
 - Updated F001 status to "passes" in PRD.json
 - Next task: F002 - Docker Compose Configuration
+
+[2026-02-10] F002 - Docker Compose Configuration (PASSES)
+- Created docker-compose.yml with Postgres 15 (Alpine) and Redis 7 (Alpine)
+- Postgres configured with user/password/db matching .env.example DATABASE_URL
+- Both services have health checks (pg_isready, redis-cli ping)
+- Named volumes (pgdata, redisdata) for data persistence across restarts
+- Validated config with `docker compose config`
+- Updated F002 status to "passes" in PRD.json
+- Next task: F003 - Entity Relationship Diagram
