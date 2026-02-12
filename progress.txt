@@ -87,3 +87,20 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Updated F007 status to "passes" in PRD.json
 - Phase 0 (Project Definition) is now COMPLETE (F000-F007 all pass)
 - Next task: F008 - Monorepo Setup (Phase 1 begins)
+
+[2026-02-12] F008 - Monorepo Setup (PASSES)
+- Chose Turborepo as monorepo tool (lighter weight, better fit for Shopify Remix ecosystem)
+- Created root package.json with npm workspaces (apps/*, packages/*)
+- Created turbo.json with task pipeline: build, dev, lint, test, typecheck, clean
+- Build tasks use dependency ordering (dependsOn: ["^build"]), dev is persistent/uncached
+- Scaffolded 5 workspaces per PRD repository structure:
+  - apps/shopify-admin (Remix embedded app)
+  - apps/api (REST API)
+  - apps/worker (background jobs)
+  - packages/db (database schema/migrations)
+  - packages/shared (shared types/utils/validation)
+- Installed Turborepo (v2.8.7), verified all 5 packages recognized by npm workspaces
+- Verified Turbo build pipeline: all 5 packages build successfully
+- Verified Turbo caching: second run hits cache on all 5 tasks (FULL TURBO)
+- Updated F008 status to "passes" in PRD.json
+- Next task: F009 - Database ORM Setup

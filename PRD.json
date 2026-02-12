@@ -959,7 +959,7 @@
       "phase": 1,
       "name": "Monorepo Setup",
       "description": "Initialize monorepo with Turborepo or Nx",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F000"
       ],

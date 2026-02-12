@@ -1,0 +1,15 @@
+{
+  "name": "@threadmark/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'build not configured yet'",
+    "dev": "echo 'dev not configured yet'",
+    "lint": "echo 'lint not configured yet'",
+    "test": "echo 'no tests yet'",
+    "typecheck": "echo 'typecheck not configured yet'",
+    "clean": "rm -rf dist build"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
