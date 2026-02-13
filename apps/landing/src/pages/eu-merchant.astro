@@ -4,22 +4,331 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
 	title="Threadmark for EU Shopify Merchants"
-	description="Automated compliance for small Shopify merchants selling into the EU."
+	description="Stop tracking product compliance in spreadsheets. Threadmark gives Shopify merchants a single place to manage, update, and export compliance data for EU regulations."
 >
+	<!-- Hero -->
 	<section class="hero">
-		<h1>EU compliance for Shopify merchants</h1>
-		<p>Placeholder content — full copy coming in L002.</p>
+		<h1>EU product compliance is a mess.<br />It doesn't have to be.</h1>
+		<p class="hero-sub">
+			If you're a Shopify merchant selling into the EU, you already know the pain:
+			scattered spreadsheets, missing certifications, audit deadlines you can't track.
+			Threadmark gives you one place to manage it all.
+		</p>
+		<div class="hero-cta">
+			<a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
+		</div>
+	</section>
+
+	<!-- Value summary -->
+	<section class="value-section">
+		<ul class="value-list">
+			<li>
+				<strong>One source of truth</strong>
+				<span>All your product compliance data in one place, synced with your Shopify catalogue.</span>
+			</li>
+			<li>
+				<strong>Audit-ready exports</strong>
+				<span>Generate JSON or PDF compliance reports whenever you need them.</span>
+			</li>
+			<li>
+				<strong>No more spreadsheets</strong>
+				<span>Replace manual tracking with structured records, validation, and change history.</span>
+			</li>
+		</ul>
+	</section>
+
+	<!-- How it works -->
+	<section class="how-section">
+		<h2>How it works</h2>
+		<ol class="steps">
+			<li>
+				<span class="step-num">1</span>
+				<div>
+					<strong>Connect your Shopify store</strong>
+					<p>Install the app and your products sync automatically.</p>
+				</div>
+			</li>
+			<li>
+				<span class="step-num">2</span>
+				<div>
+					<strong>Add compliance data</strong>
+					<p>Materials, certifications, supplier references — all validated as you go.</p>
+				</div>
+			</li>
+			<li>
+				<span class="step-num">3</span>
+				<div>
+					<strong>Export and share</strong>
+					<p>Generate reports for auditors, or share compliance pages via QR code.</p>
+				</div>
+			</li>
+		</ol>
+	</section>
+
+	<!-- Features -->
+	<section class="features-section">
+		<h2>What's included</h2>
+		<ul class="features-grid">
+			<li>Automatic product sync from Shopify</li>
+			<li>Compliance data editor with validation</li>
+			<li>Multi-material composition tracking</li>
+			<li>Certification and document attachments</li>
+			<li>Full audit trail on every change</li>
+			<li>JSON and PDF export with versioning</li>
+			<li>QR codes for public compliance pages</li>
+			<li>Compliance status dashboard</li>
+		</ul>
+	</section>
+
+	<!-- FAQ -->
+	<section class="faq-section">
+		<h2>Frequently asked questions</h2>
+		<dl class="faq-list">
+			<div class="faq-item">
+				<dt>Which EU regulations does this cover?</dt>
+				<dd>
+					Threadmark helps you organise and export the compliance data you already need
+					to maintain — materials, certifications, and product documentation. It does not
+					provide legal advice or automated regulatory checks.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>How many products can I manage?</dt>
+				<dd>
+					Threadmark is designed for merchants with 5–200 SKUs. If you have more, get in
+					touch and we'll work out the right fit.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Does it work with my existing Shopify setup?</dt>
+				<dd>
+					Yes. Threadmark installs as a Shopify embedded app and syncs with your product
+					catalogue. No theme changes required.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>What does it cost?</dt>
+				<dd>
+					Pricing will be announced closer to launch. Join the waitlist to be the first
+					to know.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Is my data safe?</dt>
+				<dd>
+					All data is isolated per store, with role-based access control and a full audit
+					trail. We never share your data with third parties.
+				</dd>
+			</div>
+		</dl>
+	</section>
+
+	<!-- Waitlist form anchor -->
+	<section class="waitlist-section" id="waitlist">
+		<h2>Get early access</h2>
+		<p>Join the waitlist and we'll let you know when Threadmark is ready.</p>
 	</section>
 </BaseLayout>
 
 <style>
+	/* Hero */
 	.hero {
-		padding: 4rem 0;
+		padding: 4rem 0 3rem;
+		max-width: 40rem;
 	}
 
-	h1 {
+	.hero h1 {
 		font-size: 2rem;
 		font-weight: 800;
-		margin-bottom: 1rem;
+		line-height: 1.2;
+		margin-bottom: 1.25rem;
+	}
+
+	.hero-sub {
+		font-size: 1.0625rem;
+		color: #4b5563;
+		margin-bottom: 2rem;
+	}
+
+	.hero-cta {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.375rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		text-decoration: none;
+		transition: background-color 0.15s ease;
+	}
+
+	.btn-primary {
+		background: #111827;
+		color: #fff;
+	}
+
+	.btn-primary:hover {
+		background: #1f2937;
+	}
+
+	/* Value summary */
+	.value-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.value-list {
+		list-style: none;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.value-list li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.value-list strong {
+		font-size: 1.0625rem;
+	}
+
+	.value-list span {
+		color: #6b7280;
+		font-size: 0.9375rem;
+	}
+
+	/* How it works */
+	.how-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.how-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 2rem;
+	}
+
+	.steps {
+		list-style: none;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.steps li {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+	}
+
+	.step-num {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		background: #f3f4f6;
+		font-weight: 700;
+		font-size: 0.875rem;
+		flex-shrink: 0;
+	}
+
+	.steps strong {
+		display: block;
+		margin-bottom: 0.125rem;
+	}
+
+	.steps p {
+		color: #6b7280;
+		font-size: 0.9375rem;
+	}
+
+	/* Features */
+	.features-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.features-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+	}
+
+	.features-grid {
+		list-style: none;
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.features-grid li {
+		padding: 0.75rem 1rem;
+		background: #f9fafb;
+		border-radius: 0.375rem;
+		font-size: 0.9375rem;
+	}
+
+	/* FAQ */
+	.faq-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.faq-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+	}
+
+	.faq-list {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.faq-item dt {
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+	}
+
+	.faq-item dd {
+		color: #4b5563;
+		font-size: 0.9375rem;
+	}
+
+	/* Waitlist */
+	.waitlist-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.waitlist-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 0.5rem;
+	}
+
+	.waitlist-section p {
+		color: #6b7280;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 640px) {
+		.hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.value-list {
+			grid-template-columns: repeat(3, 1fr);
+		}
+
+		.features-grid {
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 </style>

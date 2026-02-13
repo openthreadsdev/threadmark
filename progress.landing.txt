@@ -13,3 +13,13 @@
   - /mid-market placeholder page (full copy in L003)
   - /thanks confirmation page
   - All 4 routes build to static HTML, astro check passes with 0 errors
+
+2026-02-13 | L002 | passes | EU merchant landing copy
+  - Hero with problem statement + "Join the waitlist" CTA above the fold
+  - 3-bullet value summary (source of truth, audit-ready exports, no spreadsheets)
+  - 3-step "How it works" (connect, add data, export)
+  - 8-item MVP feature list matching PRD core features
+  - 5-item FAQ (regulations, product count, Shopify compat, pricing, data safety)
+  - Waitlist section anchor (#waitlist) ready for Netlify form in L004
+  - Copy grounded in actual product scope; no overpromising
+  - Build passes with 0 errors
