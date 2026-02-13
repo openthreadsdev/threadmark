@@ -1,0 +1,7 @@
+2026-02-13 | L000 | passes | Initialize Astro landing project
+  - Created apps/landing with Astro (static output, strict TypeScript)
+  - Package: @threadmark/landing, integrated with Turborepo workspaces
+  - .gitignore covers node_modules, dist, .netlify, env files
+  - README with dev, build, preview, and deploy instructions
+  - astro check + astro build both pass with 0 errors
+  - Build outputs to apps/landing/dist/

@@ -1,0 +1,286 @@
+{
+  "projectMetadata": {
+    "name": "Compliance Platform Landing Pages",
+    "artifact": "PRD.landing.json",
+    "strategyMode": "PMF-landing-pages-dual-audience",
+    "createdDate": "2026-02-13",
+    "timezone": "Europe/London",
+    "owner": "User",
+    "notes": [
+      "This PRD is intentionally separate from the main product PRD.json.",
+      "Goal: ship two static landing pages + waitlist capture + calendar link.",
+      "Implementation: Astro static site deployed to Netlify.",
+      "Keep this lean. No Shopify API. No backend. No database."
+    ]
+  },
+
+  "environmentSetup": {
+    "framework": "Astro",
+    "nodeVersion": ">=20",
+    "packageManager": "npm",
+    "buildCommand": "npm run build",
+    "publishDirectory": "dist",
+    "devCommand": "npm run dev",
+    "deploymentTarget": "Netlify",
+    "forms": "Netlify Forms",
+    "calendarLink": "External URL (e.g., Calendly)"
+  },
+
+  "progressTracking": {
+    "progressFile": "progress.landing.txt",
+    "featureIdPrefix": "L",
+    "statusValues": ["todo", "in_progress", "passes", "blocked"],
+    "rule": "After completing each feature, update PRD.landing.json and append a dated entry to progress.landing.txt."
+  },
+
+  "successMetrics": {
+    "primary": ["Waitlist submissions per week", "Calendar bookings per week"],
+    "secondary": [
+      "Conversion rate: visit -> waitlist",
+      "Conversion rate: visit -> booking"
+    ],
+    "engineering": [
+      "Build succeeds on clean install",
+      "All routes load directly by URL",
+      "Forms appear in Netlify dashboard",
+      "No broken internal links"
+    ]
+  },
+
+  "features": [
+    {
+      "id": "L000",
+      "title": "Initialize Astro landing project",
+      "goal": "Create minimal Astro static site ready for Netlify deployment.",
+      "tasks": [
+        "Create new landing repo or ./landing directory",
+        "Initialize Astro project (static output)",
+        "Add .gitignore (node_modules, dist, .netlify, env files)",
+        "Add README with dev + deploy instructions"
+      ],
+      "verification": [
+        "npm run dev starts Astro dev server",
+        "npm run build outputs ./dist",
+        "README contains clear setup steps"
+      ],
+      "status": "passes"
+    },
+
+    {
+      "id": "L001",
+      "title": "Create site routes",
+      "goal": "Add required pages and shared layout.",
+      "tasks": [
+        "Create / (chooser page)",
+        "Create /eu-merchant",
+        "Create /mid-market",
+        "Create /thanks",
+        "Create shared layout with header/footer"
+      ],
+      "verification": [
+        "All routes render correctly locally",
+        "Layout consistent across pages"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L002",
+      "title": "EU merchant landing copy",
+      "goal": "Conversion-focused messaging for small EU Shopify merchants.",
+      "tasks": [
+        "Hero section with clear problem + CTA",
+        "3-bullet value summary",
+        "3-step 'How it works'",
+        "MVP feature list",
+        "FAQ section"
+      ],
+      "verification": [
+        "Value proposition clear within 10 seconds",
+        "Primary CTA visible above the fold"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L003",
+      "title": "Mid-market landing copy",
+      "goal": "Credibility-focused messaging for mid-market brands.",
+      "tasks": [
+        "Hero section with audit-ready framing",
+        "Use cases section",
+        "Capability bullets (audit trail, exports, roles)",
+        "'Not a fit if' section",
+        "FAQ section"
+      ],
+      "verification": [
+        "Page invites a sales conversation",
+        "No overpromising of regulatory automation"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L004",
+      "title": "Implement Netlify Forms",
+      "goal": "Capture leads without backend.",
+      "tasks": [
+        "Add Netlify form to /eu-merchant",
+        "Add Netlify form to /mid-market",
+        "Redirect submissions to /thanks"
+      ],
+      "verification": [
+        "Forms detected by Netlify after deploy",
+        "Test submission appears in Netlify dashboard",
+        "Redirect to /thanks works"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L005",
+      "title": "Calendar integration",
+      "goal": "Ensure calendar link visible and consistent.",
+      "tasks": [
+        "Add calendar CTA above the fold on both landing pages",
+        "Add calendar CTA on /thanks",
+        "Centralize calendar URL in config"
+      ],
+      "verification": [
+        "All calendar links use configured URL",
+        "At least one booking CTA visible without scrolling"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L006",
+      "title": "Responsive layout",
+      "goal": "Mobile-first clean layout optimized for conversion.",
+      "tasks": [
+        "Single-column mobile layout",
+        "Clear spacing and typography",
+        "Accessible buttons and contrast"
+      ],
+      "verification": [
+        "Layout works at 375px and 1280px",
+        "Buttons easy to tap on mobile"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L007",
+      "title": "SEO and metadata",
+      "goal": "Add basic SEO and social sharing metadata.",
+      "tasks": [
+        "Unique title + description per page",
+        "Add OpenGraph tags",
+        "Add Twitter card tags"
+      ],
+      "verification": [
+        "Meta tags present in page source",
+        "Each page has unique metadata"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L008",
+      "title": "Privacy baseline",
+      "goal": "Minimal compliance for collecting emails.",
+      "tasks": [
+        "Add Privacy Policy link in footer",
+        "Add short data usage note near forms"
+      ],
+      "verification": [
+        "Privacy link visible on all pages",
+        "Form includes clear data usage notice"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L009",
+      "title": "Netlify deployment configuration",
+      "goal": "Ensure successful Netlify deploy.",
+      "tasks": [
+        "Add netlify.toml with build command and publish directory",
+        "Ensure all routes load directly by URL",
+        "Add simple 404 page"
+      ],
+      "verification": [
+        "Netlify build succeeds",
+        "Direct URL access works for all routes"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L010",
+      "title": "Lean quality checks",
+      "goal": "Prevent shipping broken landing page.",
+      "tasks": [
+        "Ensure clean build on fresh install",
+        "Verify no broken internal links",
+        "Optional: add simple Playwright smoke test for route loading"
+      ],
+      "verification": [
+        "npm run build succeeds in clean environment",
+        "No broken links detected"
+      ],
+      "status": "todo"
+    },
+
+    {
+      "id": "L011",
+      "title": "Post-launch checklist",
+      "goal": "Ensure lead capture works after deploy.",
+      "tasks": [
+        "Submit test forms",
+        "Verify calendar link works",
+        "Check mobile layout",
+        "Review metadata in browser devtools"
+      ],
+      "verification": [
+        "Test lead visible in Netlify dashboard",
+        "Calendar opens correctly"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "L012",
+      "title": "Minimal CI build check (GitHub Actions)",
+      "goal": "Prevent broken builds from being deployed to Netlify.",
+      "tasks": [
+        "Create .github/workflows/ci.yml",
+        "Configure workflow to run on pull_request and push to main",
+        "Steps: npm ci, npm run build",
+        "Optional: add astro check or lint step"
+      ],
+      "verification": [
+        "Workflow runs automatically on PR",
+        "Build fails if npm run build fails",
+        "No coverage requirements or complex pipeline logic"
+      ],
+      "status": "todo"
+    },
+    {
+      "id": "L013",
+      "title": "Dependabot (weekly, grouped, low-noise)",
+      "goal": "Keep dependencies reasonably up to date without creating churn.",
+      "tasks": [
+        "Create .github/dependabot.yml",
+        "Configure weekly schedule",
+        "Group dependency updates into a single PR",
+        "Limit to npm ecosystem"
+      ],
+      "verification": [
+        "Dependabot opens at most one grouped PR per week",
+        "No daily spam PRs",
+        "Can be disabled easily if noisy"
+      ],
+      "status": "todo"
+    }
+  ]
+}
