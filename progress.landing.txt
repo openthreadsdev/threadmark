@@ -23,3 +23,12 @@
   - Waitlist section anchor (#waitlist) ready for Netlify form in L004
   - Copy grounded in actual product scope; no overpromising
   - Build passes with 0 errors
+
+2026-02-13 | L003 | passes | Mid-market landing copy
+  - Hero with audit-ready framing + dual CTAs (Book a call, Join the waitlist)
+  - 4 use cases (audit prep, supplier docs, cross-team visibility, customer transparency)
+  - 6 capability bullets (audit trail, versioned exports, RBAC, structured data, sync, dashboard)
+  - 5-item "Not a fit if" section drawn from PRD explicit exclusions
+  - 5-item FAQ (vs spreadsheets, catalogue size, team replacement, multi-user, exports)
+  - No overpromising — explicitly states regulatory interpretation is user's responsibility
+  - Build passes with 0 errors

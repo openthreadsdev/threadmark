@@ -4,22 +4,363 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
 	title="Threadmark for Mid-Market Brands"
-	description="Audit-ready compliance infrastructure for growing brands."
+	description="Audit-ready compliance infrastructure for growing brands. Centralise product compliance records, track changes, and export documentation on demand."
 >
+	<!-- Hero -->
 	<section class="hero">
-		<h1>Compliance infrastructure for mid-market brands</h1>
-		<p>Placeholder content — full copy coming in L003.</p>
+		<h1>Your product compliance data should be audit-ready today, not next quarter.</h1>
+		<p class="hero-sub">
+			Growing brands need compliance infrastructure that keeps pace. Threadmark gives
+			your compliance and operations teams a single system of record for product data,
+			certifications, and audit documentation.
+		</p>
+		<div class="hero-cta">
+			<a href="#contact" class="btn btn-primary">Book a call</a>
+			<a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
+		</div>
+	</section>
+
+	<!-- Use cases -->
+	<section class="use-cases-section">
+		<h2>Built for how compliance teams actually work</h2>
+		<ul class="use-cases">
+			<li>
+				<strong>Audit preparation</strong>
+				<p>
+					Pull a complete compliance report for any product or date range. Every field
+					change is tracked, so you can show exactly what changed and when.
+				</p>
+			</li>
+			<li>
+				<strong>Supplier documentation</strong>
+				<p>
+					Attach certifications, test reports, and supplier references directly to
+					products. No more digging through email threads.
+				</p>
+			</li>
+			<li>
+				<strong>Cross-team visibility</strong>
+				<p>
+					Role-based access means compliance officers, operations managers, and product
+					teams each see what they need — nothing more, nothing less.
+				</p>
+			</li>
+			<li>
+				<strong>Customer transparency</strong>
+				<p>
+					Generate public compliance pages with QR codes so customers and retail
+					partners can verify product data themselves.
+				</p>
+			</li>
+		</ul>
+	</section>
+
+	<!-- Capabilities -->
+	<section class="capabilities-section">
+		<h2>What you get</h2>
+		<ul class="capabilities">
+			<li>
+				<strong>Full audit trail</strong>
+				<span>Every compliance field change is logged with timestamp, user, and previous value.</span>
+			</li>
+			<li>
+				<strong>Versioned exports</strong>
+				<span>Generate JSON or PDF compliance reports with built-in versioning for traceability.</span>
+			</li>
+			<li>
+				<strong>Role-based access control</strong>
+				<span>Admin, editor, and viewer roles with per-store data isolation.</span>
+			</li>
+			<li>
+				<strong>Structured compliance data</strong>
+				<span>Validated fields for materials composition, certifications, and product documentation.</span>
+			</li>
+			<li>
+				<strong>Automatic product sync</strong>
+				<span>Products sync from your Shopify catalogue via webhooks. No manual imports.</span>
+			</li>
+			<li>
+				<strong>Compliance status dashboard</strong>
+				<span>See which products have complete records and which need attention.</span>
+			</li>
+		</ul>
+	</section>
+
+	<!-- Not a fit -->
+	<section class="not-a-fit-section">
+		<h2>Threadmark might not be the right fit if&hellip;</h2>
+		<ul class="not-a-fit">
+			<li>You need automated regulatory compliance checking or legal interpretation.</li>
+			<li>You need supply chain tracking beyond supplier references and certifications.</li>
+			<li>You sell on multiple marketplaces (Amazon, eBay) and need unified compliance across all of them.</li>
+			<li>You need AI-powered auto-categorisation or predictive compliance tools.</li>
+			<li>You're looking for tax calculation, customs, or logistics integrations.</li>
+		</ul>
+		<p class="not-a-fit-note">
+			Threadmark focuses on compliance data management and export. Regulatory
+			interpretation and legal compliance validation remain your responsibility.
+		</p>
+	</section>
+
+	<!-- FAQ -->
+	<section class="faq-section">
+		<h2>Frequently asked questions</h2>
+		<dl class="faq-list">
+			<div class="faq-item">
+				<dt>How is this different from a spreadsheet or shared drive?</dt>
+				<dd>
+					Threadmark provides structured, validated fields with a full audit trail.
+					Every change is tracked. Exports are versioned. Access is role-controlled.
+					Spreadsheets can't do any of that reliably at scale.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>What size catalogue does this support?</dt>
+				<dd>
+					Threadmark is designed for brands with 50–200+ SKUs. If you have a larger
+					catalogue, get in touch and we'll discuss the right approach.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Does Threadmark replace our compliance team?</dt>
+				<dd>
+					No. Threadmark is a tool for your compliance team, not a replacement. It
+					organises and exports the data they already manage — it doesn't make
+					regulatory decisions.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>Can multiple team members use it?</dt>
+				<dd>
+					Yes. Role-based access control supports admin, editor, and viewer roles.
+					All actions are logged in the audit trail.
+				</dd>
+			</div>
+			<div class="faq-item">
+				<dt>What export formats are available?</dt>
+				<dd>
+					JSON and PDF, both with versioning. Exports include full compliance data
+					for the products and date range you select.
+				</dd>
+			</div>
+		</dl>
+	</section>
+
+	<!-- Contact / Waitlist -->
+	<section class="waitlist-section" id="waitlist">
+		<h2>Get in touch</h2>
+		<p>
+			Book a call to discuss how Threadmark fits your compliance workflow,
+			or join the waitlist for early access.
+		</p>
 	</section>
 </BaseLayout>
 
 <style>
+	/* Hero */
 	.hero {
-		padding: 4rem 0;
+		padding: 4rem 0 3rem;
+		max-width: 40rem;
 	}
 
-	h1 {
+	.hero h1 {
 		font-size: 2rem;
 		font-weight: 800;
-		margin-bottom: 1rem;
+		line-height: 1.2;
+		margin-bottom: 1.25rem;
+	}
+
+	.hero-sub {
+		font-size: 1.0625rem;
+		color: #4b5563;
+		margin-bottom: 2rem;
+	}
+
+	.hero-cta {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.375rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		text-decoration: none;
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+
+	.btn-primary {
+		background: #111827;
+		color: #fff;
+	}
+
+	.btn-primary:hover {
+		background: #1f2937;
+	}
+
+	.btn-secondary {
+		background: #fff;
+		color: #111827;
+		border: 1px solid #d1d5db;
+	}
+
+	.btn-secondary:hover {
+		border-color: #111827;
+	}
+
+	/* Use cases */
+	.use-cases-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.use-cases-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 2rem;
+	}
+
+	.use-cases {
+		list-style: none;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.use-cases li strong {
+		display: block;
+		margin-bottom: 0.25rem;
+		font-size: 1.0625rem;
+	}
+
+	.use-cases li p {
+		color: #4b5563;
+		font-size: 0.9375rem;
+	}
+
+	/* Capabilities */
+	.capabilities-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.capabilities-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+	}
+
+	.capabilities {
+		list-style: none;
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.capabilities li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.capabilities strong {
+		font-size: 1.0625rem;
+	}
+
+	.capabilities span {
+		color: #6b7280;
+		font-size: 0.9375rem;
+	}
+
+	/* Not a fit */
+	.not-a-fit-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.not-a-fit-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+	}
+
+	.not-a-fit {
+		list-style: none;
+		display: grid;
+		gap: 0.625rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.not-a-fit li {
+		padding: 0.75rem 1rem;
+		background: #fef2f2;
+		border-radius: 0.375rem;
+		font-size: 0.9375rem;
+		color: #991b1b;
+	}
+
+	.not-a-fit-note {
+		color: #6b7280;
+		font-size: 0.875rem;
+		font-style: italic;
+	}
+
+	/* FAQ */
+	.faq-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.faq-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+	}
+
+	.faq-list {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.faq-item dt {
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+	}
+
+	.faq-item dd {
+		color: #4b5563;
+		font-size: 0.9375rem;
+	}
+
+	/* Waitlist */
+	.waitlist-section {
+		padding: 3rem 0;
+		border-top: 1px solid #e5e7eb;
+	}
+
+	.waitlist-section h2 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 0.5rem;
+	}
+
+	.waitlist-section p {
+		color: #6b7280;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 640px) {
+		.hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.use-cases {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.capabilities {
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 </style>
