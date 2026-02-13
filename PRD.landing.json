@@ -134,7 +134,7 @@
         "Test submission appears in Netlify dashboard",
         "Redirect to /thanks works"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

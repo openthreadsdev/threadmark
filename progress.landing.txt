@@ -32,3 +32,12 @@
   - 5-item FAQ (vs spreadsheets, catalogue size, team replacement, multi-user, exports)
   - No overpromising — explicitly states regulatory interpretation is user's responsibility
   - Build passes with 0 errors
+
+2026-02-13 | L004 | passes | Implement Netlify Forms
+  - /eu-merchant: email-only form (waitlist-eu-merchant), inline row layout
+  - /mid-market: name + work email + company form (waitlist-mid-market), stacked layout
+  - Both forms use data-netlify="true" + hidden form-name field
+  - Both redirect to /thanks on submission via action="/thanks"
+  - Accessible labels (sr-only on eu-merchant, visible on mid-market)
+  - Verified data-netlify attribute present in built HTML output
+  - Build passes with 0 errors
