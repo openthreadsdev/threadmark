@@ -125,3 +125,22 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - 54 tests passing: schema validation, model definitions, table mappings, UUID PKs, tenant isolation, unique constraints, indexes, compliance attributes, enum values
 - Updated F009 status to "passes" in PRD.json
 - Next task: F010 - Architecture Diagrams
+
+[2026-02-12] F010 - Architecture Diagrams (PASSES)
+- Created docs/architecture/system-overview.md with comprehensive Mermaid diagrams
+- System overview diagram: Shopify platform, 3 app workspaces, 2 shared packages, infrastructure (Postgres, Redis, S3), external consumers
+- Component descriptions table: 8 components with workspace paths and purposes
+- Multi-tenancy model: row-level tenant isolation via tenant_id on all tables
+- RBAC model table: Admin/Editor/Viewer permissions across Products, Compliance, Exports, Audit, Settings
+- 5 data flow sequence diagrams per PRD:
+  1. OAuth Installation and Authentication
+  2. Product Sync (Webhook-Triggered) with HMAC verification and job queuing
+  3. Product Sync (Scheduled Reconciliation) with cursor-based pagination
+  4. Compliance Data Editing with Audit Trail (transactional with version increment)
+  5. Export Generation and Delivery (async via BullMQ, S3 upload, signed URLs)
+- Environments table: Development (Docker Compose), Staging (cloud), Production (cloud)
+- Cross-cutting concerns: Logging, Metrics, Tracing, Rate Limiting, Input Validation, Error Handling
+- Technology decisions table with rationale: Turborepo, Prisma, PostgreSQL, BullMQ, Remix, Polaris, Zod
+- 39 tests passing: file existence, diagram content, component coverage, data flows, multi-tenancy, RBAC, cross-cutting concerns, technology decisions, environments
+- Updated F010 status to "passes" in PRD.json
+- Next task: F011 - OpenAPI Spec Skeleton

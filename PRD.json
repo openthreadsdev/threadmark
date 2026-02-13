@@ -1023,7 +1023,7 @@
       "phase": 1,
       "name": "Architecture Diagrams",
       "description": "Create system architecture diagrams",
-      "status": "pending",
+      "status": "passes",
       "dependencies": [
         "F008"
       ],

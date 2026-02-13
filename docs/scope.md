@@ -2,7 +2,9 @@
 
 ## Product Vision
 
-Production-ready, enterprise-grade compliance data management platform embedded within Shopify admin, enabling EU-facing merchants to track, manage, and export product compliance information.
+Production-ready compliance data management platform embedded within Shopify admin, enabling EU-facing merchants to track, manage, and export product compliance information.
+
+**Maturity approach**: The platform will be built incrementally according to tiered non-functional requirements (see [nfr-checklist.md](nfr-checklist.md)), with Tier 0 requirements met for MVP, and higher tiers achieved as customer needs and regulatory requirements demand.
 
 ## In Scope (v1 Core Features)
 
@@ -11,7 +13,7 @@ Production-ready, enterprise-grade compliance data management platform embedded 
 3. **Compliance data editor** with validation
 4. **Multi-material composition tracking** with percentage validation (must sum to 100%)
 5. **Certification and document attachment** support
-6. **Audit trail** for all compliance field changes (append-only)
+6. **Audit trail** for all compliance field changes (queryable and exportable)
 7. **JSON and PDF exports** with versioning
 8. **QR code generation** for public compliance pages
 9. **Multi-tenant architecture** with shop-level data isolation
