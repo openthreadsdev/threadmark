@@ -50,3 +50,12 @@
   - All calendar links use siteConfig.calendarUrl, open in new tab with noopener
   - Verified URL present in all 3 built HTML pages
   - Build passes with 0 errors
+
+2026-02-13 | L006 | passes | Responsive layout
+  - All grids are single-column mobile-first, expanding at 640px breakpoint
+  - Buttons and inputs have min-height: 2.75rem (44px) for mobile tap targets
+  - Form inputs use font-size: 1rem to prevent iOS zoom on focus
+  - EU-merchant form row stacks vertically on mobile, inline on desktop
+  - Added -webkit-text-size-adjust: 100% to prevent iOS text scaling
+  - Chooser page padding reduced on mobile, restored at breakpoint
+  - Build passes with 0 errors

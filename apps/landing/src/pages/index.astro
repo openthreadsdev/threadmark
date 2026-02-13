@@ -24,7 +24,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <style>
 	.chooser {
 		text-align: center;
-		padding: 4rem 0;
+		padding: 2.5rem 0;
 	}
 
 	h1 {
@@ -72,6 +72,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 	}
 
 	@media (min-width: 640px) {
+		.chooser {
+			padding: 4rem 0;
+		}
+
 		.cards {
 			grid-template-columns: 1fr 1fr;
 			max-width: 48rem;

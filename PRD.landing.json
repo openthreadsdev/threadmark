@@ -166,7 +166,7 @@
         "Layout works at 375px and 1280px",
         "Buttons easy to tap on mobile"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {
