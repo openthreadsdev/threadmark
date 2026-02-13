@@ -81,7 +81,7 @@
         "All routes render correctly locally",
         "Layout consistent across pages"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

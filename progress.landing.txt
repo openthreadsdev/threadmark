@@ -5,3 +5,11 @@
   - README with dev, build, preview, and deploy instructions
   - astro check + astro build both pass with 0 errors
   - Build outputs to apps/landing/dist/
+
+2026-02-13 | L001 | passes | Create site routes
+  - Created BaseLayout with Header + Footer components
+  - / chooser page with cards linking to /eu-merchant and /mid-market
+  - /eu-merchant placeholder page (full copy in L002)
+  - /mid-market placeholder page (full copy in L003)
+  - /thanks confirmation page
+  - All 4 routes build to static HTML, astro check passes with 0 errors

@@ -1,17 +1,84 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Threadmark</title>
-	</head>
-	<body>
-		<h1>Threadmark</h1>
-		<p>Compliance infrastructure for modern commerce.</p>
-	</body>
-</html>
+<BaseLayout title="Threadmark — Compliance for Commerce">
+	<section class="chooser">
+		<h1>Compliance infrastructure for modern commerce</h1>
+		<p class="subtitle">Choose the path that fits your business.</p>
+
+		<div class="cards">
+			<a href="/eu-merchant" class="card">
+				<h2>EU Shopify Merchants</h2>
+				<p>Automated compliance for small merchants selling into the EU.</p>
+			</a>
+
+			<a href="/mid-market" class="card">
+				<h2>Mid-Market Brands</h2>
+				<p>Audit-ready compliance infrastructure for growing brands.</p>
+			</a>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.chooser {
+		text-align: center;
+		padding: 4rem 0;
+	}
+
+	h1 {
+		font-size: 2rem;
+		font-weight: 800;
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		font-size: 1.125rem;
+		color: #6b7280;
+		margin-bottom: 3rem;
+	}
+
+	.cards {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		max-width: 40rem;
+		margin: 0 auto;
+	}
+
+	.card {
+		border: 1px solid #e5e7eb;
+		border-radius: 0.5rem;
+		padding: 2rem;
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 0.15s ease;
+	}
+
+	.card:hover {
+		border-color: #111827;
+	}
+
+	.card h2 {
+		font-size: 1.25rem;
+		font-weight: 700;
+		margin-bottom: 0.5rem;
+	}
+
+	.card p {
+		color: #6b7280;
+		font-size: 0.9375rem;
+	}
+
+	@media (min-width: 640px) {
+		.cards {
+			grid-template-columns: 1fr 1fr;
+			max-width: 48rem;
+		}
+
+		h1 {
+			font-size: 2.5rem;
+		}
+	}
+</style>
