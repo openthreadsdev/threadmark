@@ -150,7 +150,7 @@
         "All calendar links use configured URL",
         "At least one booking CTA visible without scrolling"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

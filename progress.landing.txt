@@ -41,3 +41,12 @@
   - Accessible labels (sr-only on eu-merchant, visible on mid-market)
   - Verified data-netlify attribute present in built HTML output
   - Build passes with 0 errors
+
+2026-02-13 | L005 | passes | Calendar integration
+  - Created src/config.ts with centralized calendarUrl (Calendly)
+  - /eu-merchant: added "Book a call" secondary CTA in hero (above the fold)
+  - /mid-market: updated "Book a call" primary CTA to use config URL (was #contact)
+  - /thanks: added "Book a call" CTA below confirmation message
+  - All calendar links use siteConfig.calendarUrl, open in new tab with noopener
+  - Verified URL present in all 3 built HTML pages
+  - Build passes with 0 errors

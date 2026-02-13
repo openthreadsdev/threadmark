@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
 ---
 
 <BaseLayout title="Thanks — Threadmark" description="Thanks for signing up for the Threadmark waitlist.">
 	<section class="thanks">
 		<h1>You're on the list</h1>
 		<p>We'll be in touch soon. In the meantime, you can book a call to learn more.</p>
+		<a href={siteConfig.calendarUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Book a call</a>
 	</section>
 </BaseLayout>
 
@@ -24,5 +26,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 	p {
 		color: #6b7280;
 		font-size: 1.125rem;
+		margin-bottom: 2rem;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.375rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		text-decoration: none;
+		transition: background-color 0.15s ease;
+	}
+
+	.btn-primary {
+		background: #111827;
+		color: #fff;
+	}
+
+	.btn-primary:hover {
+		background: #1f2937;
 	}
 </style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config';
 ---
 
 <BaseLayout
@@ -16,6 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		</p>
 		<div class="hero-cta">
 			<a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
+			<a href={siteConfig.calendarUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Book a call</a>
 		</div>
 	</section>
 
@@ -193,6 +195,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 	.btn-primary:hover {
 		background: #1f2937;
+	}
+
+	.btn-secondary {
+		background: #fff;
+		color: #111827;
+		border: 1px solid #d1d5db;
+	}
+
+	.btn-secondary:hover {
+		border-color: #111827;
 	}
 
 	/* Value summary */
