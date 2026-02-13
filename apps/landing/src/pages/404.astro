@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found — Threadmark" description="The page you're looking for doesn't exist.">
+	<section class="not-found">
+		<h1>Page not found</h1>
+		<p>The page you're looking for doesn't exist or has been moved.</p>
+		<a href="/" class="btn btn-primary">Back to home</a>
+	</section>
+</BaseLayout>
+
+<style>
+	.not-found {
+		padding: 4rem 0;
+		text-align: center;
+	}
+
+	h1 {
+		font-size: 2rem;
+		font-weight: 800;
+		margin-bottom: 1rem;
+	}
+
+	p {
+		color: #6b7280;
+		font-size: 1.125rem;
+		margin-bottom: 2rem;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		min-height: 2.75rem;
+		border-radius: 0.375rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
+		text-decoration: none;
+		text-align: center;
+		transition: background-color 0.15s ease;
+	}
+
+	.btn-primary {
+		background: #111827;
+		color: #fff;
+	}
+
+	.btn-primary:hover {
+		background: #1f2937;
+	}
+</style>

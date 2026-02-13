@@ -213,7 +213,7 @@
         "Netlify build succeeds",
         "Direct URL access works for all routes"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {
