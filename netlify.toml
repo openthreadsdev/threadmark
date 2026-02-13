@@ -1,6 +1,6 @@
 [build]
   base = "apps/landing"
-  command = "cd ../.. && turbo run build --filter=@threadmark/landing"
+  command = "turbo run build --filter=@threadmark/landing"
   publish = "dist"
 
 [[headers]]
