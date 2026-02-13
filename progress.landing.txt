@@ -93,3 +93,13 @@
     - Both waitlist forms are visible with required fields
     - Privacy link present in footer on all pages
     - No broken internal links (programmatic crawl)
+  - Fixed tsconfig.json to exclude tests/ and playwright.config.ts from astro check
+
+2026-02-13 | L011 | passes | Post-launch checklist
+  - Forms: both waitlist forms verified present with correct fields (Playwright)
+  - Calendar: link present on /eu-merchant, /mid-market, /thanks — all point to config URL
+  - Mobile layout: verified via responsive styles + Playwright route loading
+  - Metadata: reviewed all OG tags in built HTML — unique per page, correct URLs
+  - Post-deploy manual steps needed:
+    - Submit test form and verify in Netlify Forms dashboard
+    - Verify Calendly link opens correctly on live site

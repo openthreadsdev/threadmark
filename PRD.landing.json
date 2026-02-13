@@ -246,7 +246,7 @@
         "Test lead visible in Netlify dashboard",
         "Calendar opens correctly"
       ],
-      "status": "todo"
+      "status": "passes"
     },
     {
       "id": "L012",
