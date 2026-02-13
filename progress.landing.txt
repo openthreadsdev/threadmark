@@ -103,3 +103,10 @@
   - Post-deploy manual steps needed:
     - Submit test form and verify in Netlify Forms dashboard
     - Verify Calendly link opens correctly on live site
+
+2026-02-13 | L012 | passes | Minimal CI build check (GitHub Actions)
+  - Created .github/workflows/ci-landing.yml
+  - Triggers on push to main and pull_request, scoped to apps/landing/** paths
+  - Steps: checkout, setup Node 20 with npm cache, npm ci, astro check, build
+  - Astro check runs as separate step before build for clearer error reporting
+  - No coverage requirements or complex pipeline logic

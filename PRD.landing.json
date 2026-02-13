@@ -263,7 +263,7 @@
         "Build fails if npm run build fails",
         "No coverage requirements or complex pipeline logic"
       ],
-      "status": "todo"
+      "status": "passes"
     },
     {
       "id": "L013",
