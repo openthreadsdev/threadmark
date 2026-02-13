@@ -83,3 +83,13 @@
   - All routes output index.html for direct URL access (/, /eu-merchant, /mid-market, /thanks, /privacy)
   - 404.html at dist root for Netlify's custom error page handling
   - Build passes with 0 errors (6 pages now)
+
+2026-02-13 | L010 | passes | Lean quality checks
+  - Clean build verified: rm node_modules + dist, npm ci, npm run build — 0 errors
+  - No broken internal links: all hrefs in built HTML resolve to existing files
+  - Added Playwright smoke tests (10 tests, all pass):
+    - All 5 routes load with 200 status and correct title
+    - 404 page returns 404 status
+    - Both waitlist forms are visible with required fields
+    - Privacy link present in footer on all pages
+    - No broken internal links (programmatic crawl)

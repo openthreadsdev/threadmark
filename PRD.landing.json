@@ -229,7 +229,7 @@
         "npm run build succeeds in clean environment",
         "No broken links detected"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

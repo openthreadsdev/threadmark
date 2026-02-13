@@ -8,11 +8,16 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "test": "playwright test",
+    "test:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "astro": "^5.17.1",
     "@astrojs/check": "^0.9.4",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.1"
   }
 }
