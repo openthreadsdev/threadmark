@@ -197,7 +197,7 @@
         "Privacy link visible on all pages",
         "Form includes clear data usage notice"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

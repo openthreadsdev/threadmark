@@ -148,6 +148,7 @@ import { siteConfig } from '../config';
 				/>
 				<button type="submit" class="btn btn-primary">Join waitlist</button>
 			</div>
+			<p class="form-notice">We'll only use your email to send Threadmark updates. <a href="/privacy">Privacy Policy</a></p>
 		</form>
 	</section>
 </BaseLayout>
@@ -373,6 +374,21 @@ import { siteConfig } from '../config';
 		outline: 2px solid #111827;
 		outline-offset: -1px;
 		border-color: transparent;
+	}
+
+	.form-notice {
+		margin-top: 0.75rem;
+		font-size: 0.8125rem;
+		color: #6b7280;
+	}
+
+	.form-notice a {
+		color: #6b7280;
+		text-decoration: underline;
+	}
+
+	.form-notice a:hover {
+		color: #111827;
 	}
 
 	.sr-only {

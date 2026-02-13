@@ -196,6 +196,7 @@ import { siteConfig } from '../config';
 				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Join waitlist</button>
+			<p class="form-notice">We'll only use your information to contact you about Threadmark. <a href="/privacy">Privacy Policy</a></p>
 		</form>
 	</section>
 </BaseLayout>
@@ -418,6 +419,21 @@ import { siteConfig } from '../config';
 		border-radius: 0.375rem;
 		font-size: 1rem;
 		font-family: inherit;
+	}
+
+	.form-notice {
+		margin-top: 0.75rem;
+		font-size: 0.8125rem;
+		color: #6b7280;
+	}
+
+	.form-notice a {
+		color: #6b7280;
+		text-decoration: underline;
+	}
+
+	.form-notice a:hover {
+		color: #111827;
 	}
 
 	.form-field input:focus {

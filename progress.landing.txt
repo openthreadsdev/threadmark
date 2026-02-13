@@ -67,3 +67,11 @@
   - Each page has unique title and description (verified in built HTML)
   - All 4 pages confirmed to have og:title and twitter:card in output
   - Build passes with 0 errors
+
+2026-02-13 | L008 | passes | Privacy baseline
+  - Added Privacy Policy link to footer (visible on all pages)
+  - Created /privacy page with data collection, usage, storage, and rights sections
+  - Added data usage notice below both forms with link to privacy policy
+  - /privacy links to Netlify's privacy policy for data storage details
+  - Contact email: privacy@threadmark.com
+  - Build passes with 0 errors (5 pages now)
