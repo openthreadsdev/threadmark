@@ -1,0 +1,234 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Tenants — each Shopify shop is an isolated tenant
+// ---------------------------------------------------------------------------
+model Tenant {
+  id                   String       @id @default(uuid()) @db.Uuid
+  shopDomain           String       @unique @map("shop_domain")
+  shopifyShopId        BigInt       @unique @map("shopify_shop_id")
+  accessTokenEncrypted String       @map("access_token_encrypted")
+  shopName             String?      @map("shop_name")
+  shopEmail            String?      @map("shop_email")
+  plan                 Plan         @default(free)
+  status               TenantStatus @default(active)
+  installedAt          DateTime     @default(now()) @map("installed_at") @db.Timestamptz
+  uninstalledAt        DateTime?    @map("uninstalled_at") @db.Timestamptz
+  settings             Json?        @default("{}")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  products          Product[]
+  users             User[]
+  exports           Export[]
+  auditLogs         AuditLog[]
+  complianceRecords ComplianceRecord[]
+
+  @@map("tenants")
+}
+
+enum Plan {
+  free
+  pro
+  enterprise
+}
+
+enum TenantStatus {
+  active
+  suspended
+  uninstalled
+}
+
+// ---------------------------------------------------------------------------
+// Products — mirrors Shopify products via webhook sync
+// ---------------------------------------------------------------------------
+model Product {
+  id               String           @id @default(uuid()) @db.Uuid
+  tenantId         String           @map("tenant_id") @db.Uuid
+  shopifyProductId BigInt           @map("shopify_product_id")
+  title            String
+  handle           String?
+  vendor           String?
+  productType      String?          @map("product_type")
+  shopifyStatus    ShopifyStatus    @default(active) @map("shopify_status")
+  complianceStatus ComplianceStatus @default(pending) @map("compliance_status")
+  shopifyUpdatedAt DateTime?        @map("shopify_updated_at") @db.Timestamptz
+  syncedAt         DateTime?        @map("synced_at") @db.Timestamptz
+  isDeleted        Boolean          @default(false) @map("is_deleted")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  complianceRecord ComplianceRecord?
+  auditLogs        AuditLog[]
+  exports          Export[]
+
+  @@unique([tenantId, shopifyProductId])
+  @@index([tenantId, complianceStatus])
+  @@index([tenantId, isDeleted])
+  @@map("products")
+}
+
+enum ShopifyStatus {
+  active
+  draft
+  archived
+}
+
+enum ComplianceStatus {
+  pending
+  in_progress
+  complete
+  exported
+}
+
+// ---------------------------------------------------------------------------
+// Compliance Records — one-to-one with products, stores all 10 attributes
+// ---------------------------------------------------------------------------
+model ComplianceRecord {
+  id                   String   @id @default(uuid()) @db.Uuid
+  productId            String   @unique @map("product_id") @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+  materialComposition  Json?    @map("material_composition")
+  countryOfManufacture String?  @map("country_of_manufacture")
+  supplierReference    String?  @map("supplier_reference") @db.VarChar(255)
+  certifications       Json?
+  careInstructions     String?  @map("care_instructions") @db.VarChar(1000)
+  recycledContentPct   Decimal? @map("recycled_content_pct") @db.Decimal(5, 2)
+  safetyWarnings       String?  @map("safety_warnings") @db.VarChar(500)
+  environmentalImpact  String?  @map("environmental_impact") @db.VarChar(1000)
+  productDimensions    Json?    @map("product_dimensions")
+  chemicalCompliance   Json?    @map("chemical_compliance")
+  version              Int      @default(1)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("compliance_records")
+}
+
+// ---------------------------------------------------------------------------
+// Audit Logs — append-only record of all data changes
+// ---------------------------------------------------------------------------
+model AuditLog {
+  id         String      @id @default(uuid()) @db.Uuid
+  tenantId   String      @map("tenant_id") @db.Uuid
+  productId  String?     @map("product_id") @db.Uuid
+  userId     String?     @map("user_id") @db.Uuid
+  action     AuditAction
+  entityType EntityType  @map("entity_type")
+  entityId   String      @map("entity_id") @db.Uuid
+  oldValue   Json?       @map("old_value")
+  newValue   Json?       @map("new_value")
+  ipAddress  String?     @map("ip_address")
+  userAgent  String?     @map("user_agent")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  user    User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([productId, createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  create
+  update
+  delete
+  export
+  sync
+}
+
+enum EntityType {
+  compliance_record
+  product
+  export
+  tenant
+}
+
+// ---------------------------------------------------------------------------
+// Users — Shopify users associated with a tenant
+// ---------------------------------------------------------------------------
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  shopifyUserId BigInt    @map("shopify_user_id")
+  email         String
+  firstName     String?   @map("first_name")
+  lastName      String?   @map("last_name")
+  role          UserRole  @default(viewer)
+  isActive      Boolean   @default(true) @map("is_active")
+  lastLoginAt   DateTime? @map("last_login_at") @db.Timestamptz
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  auditLogs AuditLog[]
+  exports   Export[]
+
+  @@unique([tenantId, shopifyUserId])
+  @@map("users")
+}
+
+enum UserRole {
+  admin
+  editor
+  viewer
+}
+
+// ---------------------------------------------------------------------------
+// Exports — tracks export requests and lifecycle
+// ---------------------------------------------------------------------------
+model Export {
+  id            String       @id @default(uuid()) @db.Uuid
+  tenantId      String       @map("tenant_id") @db.Uuid
+  productId     String?      @map("product_id") @db.Uuid
+  requestedBy   String       @map("requested_by") @db.Uuid
+  format        ExportFormat
+  status        ExportStatus @default(queued)
+  fileUrl       String?      @map("file_url")
+  fileSizeBytes BigInt?      @map("file_size_bytes")
+  version       Int          @default(1)
+  filters       Json?
+  errorMessage  String?      @map("error_message")
+  completedAt   DateTime?    @map("completed_at") @db.Timestamptz
+  expiresAt     DateTime?    @map("expires_at") @db.Timestamptz
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  user    User     @relation(fields: [requestedBy], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@map("exports")
+}
+
+enum ExportFormat {
+  json
+  pdf
+}
+
+enum ExportStatus {
+  queued
+  processing
+  completed
+  failed
+}

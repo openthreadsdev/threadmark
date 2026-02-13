@@ -104,3 +104,24 @@ Run ./ralph-once.sh to start implementing features one at a time.
 - Verified Turbo caching: second run hits cache on all 5 tasks (FULL TURBO)
 - Updated F008 status to "passes" in PRD.json
 - Next task: F009 - Database ORM Setup
+
+[2026-02-12] F009 - Database ORM Setup (PASSES)
+- Chose Prisma as ORM (referenced in PRD filesAffected, strong migration tooling, type-safe client)
+- Installed prisma (dev) and @prisma/client in packages/db
+- Created full Prisma schema (packages/db/prisma/schema.prisma) with all 6 models from ERD:
+  - Tenant (tenants): shop isolation, encrypted access tokens, plan/status enums
+  - Product (products): Shopify sync mirror, compliance status tracking, soft delete
+  - ComplianceRecord (compliance_records): all 10 compliance attributes, 1:1 with products, version counter
+  - AuditLog (audit_logs): append-only, before/after JSONB snapshots, action/entity enums
+  - User (users): RBAC (admin/editor/viewer), Shopify user association
+  - Export (exports): lifecycle tracking (queued/processing/completed/failed), S3 file storage
+- All models use UUID primary keys, snake_case table/column mapping, timestamptz timestamps
+- 9 enums: Plan, TenantStatus, ShopifyStatus, ComplianceStatus, AuditAction, EntityType, UserRole, ExportFormat, ExportStatus
+- Indexes and unique constraints match ERD specification
+- Created src/index.ts with PrismaClient singleton (dev hot-reload safe)
+- Configured prisma.config.ts for migrations and datasource
+- Updated turbo.json to include generated/** in build outputs
+- Schema validates (prisma validate) and client generates successfully (prisma generate)
+- 54 tests passing: schema validation, model definitions, table mappings, UUID PKs, tenant isolation, unique constraints, indexes, compliance attributes, enum values
+- Updated F009 status to "passes" in PRD.json
+- Next task: F010 - Architecture Diagrams
