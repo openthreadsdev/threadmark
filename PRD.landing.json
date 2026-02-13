@@ -182,7 +182,7 @@
         "Meta tags present in page source",
         "Each page has unique metadata"
       ],
-      "status": "todo"
+      "status": "passes"
     },
 
     {

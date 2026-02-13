@@ -59,3 +59,11 @@
   - Added -webkit-text-size-adjust: 100% to prevent iOS text scaling
   - Chooser page padding reduced on mobile, restored at breakpoint
   - Build passes with 0 errors
+
+2026-02-13 | L007 | passes | SEO and metadata
+  - Added OG tags to BaseLayout: og:type, og:url, og:title, og:description, og:site_name
+  - Added Twitter card tags: twitter:card (summary), twitter:title, twitter:description
+  - Added canonical URL via Astro.url
+  - Each page has unique title and description (verified in built HTML)
+  - All 4 pages confirmed to have og:title and twitter:card in output
+  - Build passes with 0 errors

@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { title, description = 'Compliance infrastructure for modern commerce.' } = Astro.props;
+const canonicalUrl = Astro.url.href;
 ---
 
 <!doctype html>
@@ -19,6 +20,19 @@ const { title, description = 'Compliance infrastructure for modern commerce.' } 
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="canonical" href={canonicalUrl} />
+
+		<!-- OpenGraph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:site_name" content="Threadmark" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
 	</head>
 	<body>
 		<Header />
