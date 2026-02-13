@@ -110,3 +110,12 @@
   - Steps: checkout, setup Node 20 with npm cache, npm ci, astro check, build
   - Astro check runs as separate step before build for clearer error reporting
   - No coverage requirements or complex pipeline logic
+
+2026-02-13 | L013 | passes | Dependabot (weekly, grouped, low-noise)
+  - Created .github/dependabot.yml
+  - npm ecosystem only, weekly schedule (Mondays)
+  - All dependencies grouped into a single PR (patterns: '*')
+  - open-pull-requests-limit: 1 — at most one PR open at a time
+  - To disable: delete the file or set open-pull-requests-limit: 0
+
+--- All L000–L013 features complete ---

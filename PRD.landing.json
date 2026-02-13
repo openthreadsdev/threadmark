@@ -280,7 +280,7 @@
         "No daily spam PRs",
         "Can be disabled easily if noisy"
       ],
-      "status": "todo"
+      "status": "passes"
     }
   ]
 }
